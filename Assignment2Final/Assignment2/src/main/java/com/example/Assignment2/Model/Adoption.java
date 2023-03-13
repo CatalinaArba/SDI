@@ -1,5 +1,6 @@
 package com.example.Assignment2.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,13 +23,14 @@ public class Adoption {
     @OneToMany(mappedBy = "adoption", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Pet> pet;
 
-
     public Adoption(LocalDate adoptionDate,  Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes) {//Integer petId, Integer customerId,
         this.adoptionDate = adoptionDate;
         this.adoptionFee = adoptionFee;
         this.adoptionStatus = adoptionStatus;
         this.adoptionLocation = adoptionLocation;
         this.adoptionNotes = adoptionNotes;
+    }
+    public Adoption() {
     }
     public Adoption(Integer id,LocalDate adoptionDate,  Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes) {//Integer petId, Integer customerId,
         this.id=id;
@@ -47,8 +49,6 @@ public class Adoption {
         this.pet = pet;
     }
 
-    public Adoption() {
-    }
 
     public Integer getId() {
         return id;
@@ -110,15 +110,4 @@ public class Adoption {
         return Objects.hash(getId(), getAdoptionDate(), getAdoptionFee(), getAdoptionStatus(), getAdoptionLocation(), getAdoptionNotes());//, getPetId(), getCustomerId(),
     }
 
-    public AdoptionDTO toAdoptionDTO()
-    {
-        AdoptionDTO adoptionDto = new AdoptionDTO();
-        adoptionDto.setAdoptionDate(this.getAdoptionDate());
-        adoptionDto.setAdoptionFee(this.getAdoptionFee());
-        adoptionDto.setAdoptionLocation(this.getAdoptionLocation());
-        adoptionDto.setAdoptionStatus(this.getAdoptionStatus());
-        adoptionDto.setAdoptionNotes(this.getAdoptionNotes());
-        adoptionDto.setId(this.getId());
-        return adoptionDto;
-    }
 }

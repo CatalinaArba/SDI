@@ -100,20 +100,8 @@ public class Pet {
         return Objects.hash(getId(), getName(), getPetType(), getAge(), getGender(), getPrice());
     }
 
-    public PetDTO toPetDTO()
-    {
-        PetDTO pet=new PetDTO();
-        pet.setId(this.getId());
-        pet.setAdoption(new Adoption(this.adoption.getId(),this.adoption.getAdoptionDate(),this.adoption.getAdoptionFee(),this.adoption.getAdoptionStatus(),this.adoption.getAdoptionLocation(),this.adoption.getAdoptionNotes()).toAdoptionDTO());
-        pet.setAge(this.getAge());
-        pet.setGender(this.getGender());
-        pet.setPrice(this.getPrice());
-        pet.setName(this.getName());
-        pet.setPetType(this.getPetType());
-
-        return pet;
-    }
-
+    /*
+    For map function from PetController: another way but not that elegant
     public PetDTOWithId toPetDTOWithId()
     {
         PetDTOWithId pet = new PetDTOWithId();
@@ -131,5 +119,5 @@ public class Pet {
             pet.setAdoptionId(this.adoption.getId());
         }
         return pet;
-    }
+    }*/
 }

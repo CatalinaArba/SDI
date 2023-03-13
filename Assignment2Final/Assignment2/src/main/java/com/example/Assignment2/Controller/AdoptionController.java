@@ -6,11 +6,13 @@ import com.example.Assignment2.Model.AdoptionDTO;
 import com.example.Assignment2.Model.Pet;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Destination;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class AdoptionController {
     @Autowired
     private final IAdoptionRepository adoptionRepository;
-    //@Autowired
+
     private final IPetRepository petRepository;
 
     public AdoptionController(IAdoptionRepository adoptionRepository, IPetRepository petRepository) {
@@ -32,9 +34,12 @@ public class AdoptionController {
     // tag::get-aggregate-root[]
     @GetMapping("/adoptions")
     List<AdoptionDTO> all() {
-        return adoptionRepository.findAll().stream()
-                .map(m->m.toAdoptionDTO())
+        ModelMapper modelMapper = new ModelMapper();
+        List<Adoption> adoptions = adoptionRepository.findAll();
+        List<AdoptionDTO> adoptionDTOs = adoptions.stream()
+                .map(adoption -> modelMapper.map(adoption, AdoptionDTO.class))
                 .collect(Collectors.toList());
+        return adoptionDTOs;
     }
     // end::get-aggregate-root[]
 

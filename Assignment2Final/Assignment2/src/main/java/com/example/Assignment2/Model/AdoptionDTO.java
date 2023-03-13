@@ -23,6 +23,14 @@ public class AdoptionDTO {
         this.adoptionNotes = adoptionNotes;
     }
 
+    public AdoptionDTO(Integer id, LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes) {
+        this.id = id;
+        this.adoptionDate = adoptionDate;
+        this.adoptionFee = adoptionFee;
+        this.adoptionStatus = adoptionStatus;
+        this.adoptionLocation = adoptionLocation;
+        this.adoptionNotes = adoptionNotes;
+    }
 
     public AdoptionDTO() {
     }
