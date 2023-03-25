@@ -19,7 +19,19 @@ public class Assignment2Application {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/pets").allowedOrigins("http://localhost:8080");
+				registry.addMapping("/pets").allowedOrigins("*");
+				registry.addMapping("/pets/{id}").allowedOrigins("*");
+				registry.addMapping("/pets/price/{minPrice}").allowedOrigins("*");
+				registry.addMapping("/adoptions").allowedOrigins("*");
+				registry.addMapping("/adoptions/{petId}").allowedOrigins("*");
+				registry.addMapping("/adoptions/{id}").allowedOrigins("*");
+				registry.addMapping("/adoptions/statistics").allowedOrigins("*");
+				registry.addMapping("/adoptionCustomer").allowedOrigins("*");
+				registry.addMapping("/adoptionCustomer/{adoptionId}/{customerId}").allowedOrigins("*");
+				registry.addMapping("/adoptionCustomer/{id}").allowedOrigins("*");
+				registry.addMapping("/customers").allowedOrigins("*");
+				registry.addMapping("/customers/{id}").allowedOrigins("*");
+
 			}
 		};
 	}
