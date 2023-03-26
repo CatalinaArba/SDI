@@ -1,15 +1,14 @@
 package com.example.Assignment2.Controller;
 
 import com.example.Assignment2.Exception.CustomerNotFoundException;
-import com.example.Assignment2.Model.AdoptionCustomer;
-import com.example.Assignment2.Model.Customer;
-import com.example.Assignment2.Model.CustomerDTO;
+import com.example.Assignment2.Model.*;
 import com.example.Assignment2.Repository.IAdoptionCustomerRepository;
 import com.example.Assignment2.Repository.ICustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,10 +44,17 @@ public class CustomerController {
 
     // Single item
     @GetMapping("/customers/{id}")
-    Customer one(@PathVariable Integer id) {
-
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new CustomerNotFoundException(id));
+    CustomerDTOWithAdoptionId one(@PathVariable Integer id) {
+        ModelMapper modelMapper = new ModelMapper();
+        Customer customer=customerRepository.findById(id).get();
+        CustomerDTOWithAdoptionId customerDTOWithAdoptionId=customer.customerToCustomerDTOWithAdoptionId();
+        List<Integer> adoptionIds=new ArrayList<>();
+        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
+        for(AdoptionCustomer ac:adoptionCustomers)
+            if(ac.getCustomerAdoptionCustomer().getId()== customer.getId())
+                adoptionIds.add(ac.getAdoptionAdoptionCustomer().getId());
+        customerDTOWithAdoptionId.setAdoptionIds(adoptionIds);
+        return  customerDTOWithAdoptionId;
     }
 
     @PutMapping("/customers/{id}")

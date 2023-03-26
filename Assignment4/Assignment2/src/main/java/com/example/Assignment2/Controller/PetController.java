@@ -39,9 +39,7 @@ public class PetController {
         //Same thing using map function: it works
         //return petRepository.findAll().stream().map(m->m.toPetDTOWithId()).collect(Collectors.toList());
     }
-    // end::get-aggregate-root[]
 
-    //I dont think it should be allowed, but I already wrote this function
     @PostMapping("/pets")
     Pet newPet(@RequestBody Pet newPet) {
         return petRepository.save(newPet);

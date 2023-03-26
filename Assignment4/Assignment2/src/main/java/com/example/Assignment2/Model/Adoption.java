@@ -2,6 +2,10 @@ package com.example.Assignment2.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.persistence.*;
+import jakarta.validation.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +16,11 @@ import java.util.Objects;
 public class Adoption {
     private @Id
     @GeneratedValue Integer id;
+
+    @NotBlank(message ="Name is mandatory")
     private LocalDate adoptionDate;
+
+
     private Integer adoptionFee;
     private String adoptionStatus;
     private String adoptionLocation;
