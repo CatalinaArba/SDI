@@ -15,7 +15,7 @@ public class Assignment2Application {
 	}
 
 
-	@Bean
+/*	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -38,5 +38,5 @@ public class Assignment2Application {
 		};
 
 
-	}
+	}*/
 }
