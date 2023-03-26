@@ -24,6 +24,15 @@ public class Adoption {
     @OneToMany(mappedBy = "adoptionAdoptionCustomer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<AdoptionCustomer> adoptionCustomers;
 
+    public Adoption(LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes, List<Pet> pet) {
+        this.adoptionDate = adoptionDate;
+        this.adoptionFee = adoptionFee;
+        this.adoptionStatus = adoptionStatus;
+        this.adoptionLocation = adoptionLocation;
+        this.adoptionNotes = adoptionNotes;
+        this.pet = pet;
+    }
+
     public List<AdoptionCustomer> getAdoptionCustomers() {
         return adoptionCustomers;
     }
