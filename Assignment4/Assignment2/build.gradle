@@ -17,10 +17,21 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.postgresql:postgresql:42.3.1'
 	implementation 'org.modelmapper:modelmapper:2.3.8'
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'junit:junit:4.13.1'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.apache.httpcomponents:httpclient'
+
+	testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.1')
+	testImplementation('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+	testImplementation('org.junit.vintage:junit-vintage-engine:5.8.1') {
+		exclude group: 'org.hamcrest', module: 'hamcrest-core'
+	}
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

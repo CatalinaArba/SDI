@@ -20,7 +20,7 @@ public class PetController {
     private final IPetRepository petRepository;
 
 
-    PetController(IPetRepository petRepository) {
+    public PetController(IPetRepository petRepository) {
         this.petRepository = petRepository;
 
     }
@@ -83,7 +83,7 @@ public class PetController {
     }
 
     @GetMapping("/pets/price/{minPrice}")
-    List<Pet> byPrice(@PathVariable Integer minPrice) {
+    public List<Pet> byPrice(@PathVariable Integer minPrice) {
         return petRepository.findByPriceGreaterThanEqual(minPrice);
     }
 }
