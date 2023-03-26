@@ -108,15 +108,4 @@ public class Customer {
                 '}';
     }
 
-    public CustomerDTOWithAdoptionId customerToCustomerDTOWithAdoptionId()
-    {
-        CustomerDTOWithAdoptionId customerDTOS=new CustomerDTOWithAdoptionId();
-        customerDTOS.setAddress(this.getAddress());
-        customerDTOS.setId(this.getId());
-        customerDTOS.setMail(this.getMail());
-        customerDTOS.setFirstName(this.getFirstName());
-        customerDTOS.setLastName(this.getLastName());
-        customerDTOS.setPhone(this.getPhone());
-        return customerDTOS;
-    }
 }

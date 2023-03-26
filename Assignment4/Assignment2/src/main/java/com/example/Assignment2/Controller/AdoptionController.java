@@ -3,19 +3,20 @@ package com.example.Assignment2.Controller;
 import com.example.Assignment2.Exception.AdoptionNotFoundException;
 import com.example.Assignment2.Exception.PetNotFoundException;
 import com.example.Assignment2.Model.*;
+import com.example.Assignment2.Repository.IAdoptionCustomerRepository;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Destination;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,9 +24,11 @@ public class AdoptionController {
     @Autowired
     private final IAdoptionRepository adoptionRepository;
 
+    private IAdoptionCustomerRepository adoptionCustomerRepository;
     private final IPetRepository petRepository;
 
-    public AdoptionController(IAdoptionRepository adoptionRepository, IPetRepository petRepository) {
+    public AdoptionController(IAdoptionRepository adoptionRepository, IPetRepository petRepository,IAdoptionCustomerRepository adoptionCustomerRepository) {
+        this.adoptionCustomerRepository=adoptionCustomerRepository;
         this.adoptionRepository = adoptionRepository;
         this.petRepository = petRepository;
     }
@@ -42,7 +45,7 @@ public class AdoptionController {
 
 
     @PostMapping("/adoptions/{petId}")
-    Adoption newAdoption(@RequestBody Adoption newAdoption,@PathVariable Integer petId) {
+    Adoption newAdoption(@Valid @RequestBody Adoption newAdoption, @PathVariable Integer petId) {
         Pet pet=petRepository.findById(petId).get();
         List<Pet> petList=new ArrayList<>();
         petList.add(pet);
@@ -87,12 +90,23 @@ public class AdoptionController {
 
     // Single item
     @GetMapping("/adoptions/{id}")
-    Adoption one(@PathVariable Integer id) {
+    AdoptionDTOWithCustomerIds one(@PathVariable Integer id) {
+
         if (adoptionRepository.findById(id).isEmpty())
             throw new PetNotFoundException(id);
 
-        Adoption adoption = adoptionRepository.findById(id).get();
-        return adoption;
+        Adoption adoption=adoptionRepository.findById(id).get();
+        AdoptionDTOWithCustomerIds adoptionDTOWithCustomerIds=new AdoptionDTOWithCustomerIds();
+
+        List<Integer> customersIds=new ArrayList<>();
+        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
+        for(AdoptionCustomer ac:adoptionCustomers)
+            if(ac.getAdoptionAdoptionCustomer().getId()== adoption.getId())
+                customersIds.add(ac.getCustomerAdoptionCustomer().getId());
+        adoptionDTOWithCustomerIds.setCustomersIds(customersIds);
+        adoptionDTOWithCustomerIds.setAdoption(adoption);
+
+        return  adoptionDTOWithCustomerIds;
     }
 
     @PutMapping("/adoptions/{id}")
@@ -142,5 +156,16 @@ public class AdoptionController {
         }
         adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
         return adoptionDTOStatisticsPetsPrices;
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)
+    {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName =((FieldError) error).getField();
+            String errorMessage =error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

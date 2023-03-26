@@ -45,15 +45,16 @@ public class CustomerController {
     // Single item
     @GetMapping("/customers/{id}")
     CustomerDTOWithAdoptionId one(@PathVariable Integer id) {
-        ModelMapper modelMapper = new ModelMapper();
+
         Customer customer=customerRepository.findById(id).get();
-        CustomerDTOWithAdoptionId customerDTOWithAdoptionId=customer.customerToCustomerDTOWithAdoptionId();
+        CustomerDTOWithAdoptionId customerDTOWithAdoptionId=new CustomerDTOWithAdoptionId();
         List<Integer> adoptionIds=new ArrayList<>();
         List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
         for(AdoptionCustomer ac:adoptionCustomers)
             if(ac.getCustomerAdoptionCustomer().getId()== customer.getId())
                 adoptionIds.add(ac.getAdoptionAdoptionCustomer().getId());
         customerDTOWithAdoptionId.setAdoptionIds(adoptionIds);
+        customerDTOWithAdoptionId.setCustomer(customer);
         return  customerDTOWithAdoptionId;
     }
 

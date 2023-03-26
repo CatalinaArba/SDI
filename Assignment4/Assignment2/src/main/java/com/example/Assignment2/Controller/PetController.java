@@ -6,12 +6,17 @@ import com.example.Assignment2.Exception.PetNotFoundException;
 import com.example.Assignment2.Model.*;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,7 +46,7 @@ public class PetController {
     }
 
     @PostMapping("/pets")
-    Pet newPet(@RequestBody Pet newPet) {
+    Pet newPet(@Valid @RequestBody Pet newPet) {
         return petRepository.save(newPet);
     }
 
@@ -83,5 +88,17 @@ public class PetController {
     @GetMapping("/pets/price/{minPrice}")
     public List<Pet> byPrice(@PathVariable Integer minPrice) {
         return petRepository.findByPriceGreaterThanEqual(minPrice);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)
+    {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName =((FieldError) error).getField();
+            String errorMessage =error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

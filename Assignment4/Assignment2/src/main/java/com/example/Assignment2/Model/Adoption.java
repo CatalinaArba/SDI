@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.*;
 import jakarta.validation.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -17,13 +18,16 @@ public class Adoption {
     private @Id
     @GeneratedValue Integer id;
 
-    @NotBlank(message ="Name is mandatory")
+    @NotBlank(message ="Adoption date is mandatory")
     private LocalDate adoptionDate;
-
-
+    @Min(value=1, message ="Adoption fee should be more than 0")
     private Integer adoptionFee;
+
+    @NotBlank(message = "The adoption status is mandatory")
     private String adoptionStatus;
+    @NotBlank(message = "The adoption location is mandatory")
     private String adoptionLocation;
+    @NotBlank(message = "The adoption notes is mandatory")
     private String adoptionNotes;
 
     @OneToMany(mappedBy = "adoption", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

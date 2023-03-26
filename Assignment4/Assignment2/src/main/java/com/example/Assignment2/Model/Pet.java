@@ -2,6 +2,7 @@ package com.example.Assignment2.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ public class Pet {
     @GeneratedValue Integer id;
     private String name;
     private String petType;
+    @NotNull(message="Every pet must have an age!")
     private Integer age;
     private String gender;
     private Integer price;
