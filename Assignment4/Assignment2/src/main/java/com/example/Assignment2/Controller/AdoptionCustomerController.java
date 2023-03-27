@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,23 @@ public class AdoptionCustomerController {
         adoption.getAdoptionCustomers().add(newAdoptionCustomer);
         customer.getAdoptionCustomers().add(newAdoptionCustomer);
         return newAdoptionCustomer;
+    }
+
+    @PostMapping("/adoptionCustomer/{customerId}")
+    List<AdoptionCustomer> newAdoptonCustomerList(@RequestBody List<AdoptionCustomerDTOWithId> AdoptionCustomerList,@PathVariable Integer customerId) {
+        Customer selectedCustomer=customerRepository.findById(customerId).get();
+        List<AdoptionCustomer> finalLits= new ArrayList<>();
+        for(AdoptionCustomerDTOWithId acdto:AdoptionCustomerList){
+            AdoptionCustomer ac=new AdoptionCustomer();
+            ac.setAdoptionContract(acdto.getAdoptionContract());
+            ac.setCustomerFeedback(acdto.getCustomerFeedback());
+            ac.setCustomerAdoptionCustomer(selectedCustomer);
+            Adoption selectedAdoption=adoptionRepository.findById(acdto.getIdAdoptionAdoptionCustomer()).get();
+            ac.setAdoptionAdoptionCustomer(selectedAdoption);
+            ac=adoptionCustomerRepository.save(ac);
+            finalLits.add(ac);
+        }
+        return finalLits;
     }
 
 
