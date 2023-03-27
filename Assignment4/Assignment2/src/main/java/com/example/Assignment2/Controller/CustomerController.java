@@ -1,6 +1,5 @@
 package com.example.Assignment2.Controller;
 
-import com.example.Assignment2.Exception.CustomerNotFoundException;
 import com.example.Assignment2.Model.*;
 import com.example.Assignment2.Repository.IAdoptionCustomerRepository;
 import com.example.Assignment2.Repository.ICustomerRepository;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,5 +81,42 @@ public class CustomerController {
     @DeleteMapping("/customers/{id}")
     void deleteCustomer(@PathVariable Integer id) {
         customerRepository.deleteById(id);
+    }
+
+
+    @GetMapping("/customers/noOtherCustomerForAdoptions")
+    List<CustomerDTOSatisticsNoCoustomer> statisticsNoCustomers()
+    {
+        List<AdoptionCustomer> adoptionCustomerList=adoptionCustomerRepository.findAll();
+
+        List<Customer> customerList=customerRepository.findAll();
+
+        List<CustomerDTOSatisticsNoCoustomer> finalList=new ArrayList<>();
+
+        for(Customer c:customerList){
+            Integer no=0;
+            for(AdoptionCustomer ac:adoptionCustomerList){
+                if (ac.getCustomerAdoptionCustomer().getId()==c.getId())
+                {
+                    Integer adoptionID=ac.getAdoptionAdoptionCustomer().getId();
+                    for(AdoptionCustomer ac2:adoptionCustomerList)
+                    {
+                        if (ac2.getAdoptionAdoptionCustomer().getId()==adoptionID &&ac2.getCustomerAdoptionCustomer().getId()!=c.getId())
+                            no++;
+                    }
+                }
+            }
+            CustomerDTOSatisticsNoCoustomer customerDTOSatisticsNoCoustomer=new CustomerDTOSatisticsNoCoustomer();
+            customerDTOSatisticsNoCoustomer.setId(c.getId());
+            customerDTOSatisticsNoCoustomer.setAddress(c.getAddress());
+            customerDTOSatisticsNoCoustomer.setFirstName(c.getFirstName());
+            customerDTOSatisticsNoCoustomer.setLastName(c.getLastName());
+            customerDTOSatisticsNoCoustomer.setPhone(c.getPhone());
+            customerDTOSatisticsNoCoustomer.setMail(c.getMail());
+            customerDTOSatisticsNoCoustomer.setNoCustomers(no);
+            finalList.add(customerDTOSatisticsNoCoustomer);
+        }
+        finalList.sort(Comparator.comparingInt(CustomerDTOSatisticsNoCoustomer::getNoCustomers).reversed());
+        return finalList;
     }
 }

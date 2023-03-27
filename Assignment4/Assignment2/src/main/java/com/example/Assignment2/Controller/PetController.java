@@ -90,6 +90,7 @@ public class PetController {
         return petRepository.findByPriceGreaterThanEqual(minPrice);
     }
 
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)
     {
