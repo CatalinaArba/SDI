@@ -45,24 +45,25 @@ public class PetController {
         //return petRepository.findAll().stream().map(m->m.toPetDTOWithId()).collect(Collectors.toList());
     }
 
-    @PostMapping("/pets")
+    @PostMapping("/pets/add")
     Pet newPet(@Valid @RequestBody Pet newPet) {
         return petRepository.save(newPet);
     }
 
     // Single item
-    @GetMapping("/pets/{id}")
-    PetDTO one(@PathVariable Integer id) {
-        if (petRepository.findById(id).isEmpty())
-            throw new PetNotFoundException(id);
+    @GetMapping("/pets/{id}/details")
+    PetDTO one(@PathVariable String id) {
+        Integer intId=Integer.parseInt(id);
+        if (petRepository.findById(intId).isEmpty())
+            throw new PetNotFoundException(intId);
 
         ModelMapper modelMapper = new ModelMapper();
-        PetDTO petDTO = modelMapper.map(petRepository.findById(id).get(), PetDTO.class);
+        PetDTO petDTO = modelMapper.map(petRepository.findById(intId).get(), PetDTO.class);
         return petDTO;
 
     }
 
-    @PutMapping("/pets/{id}")
+    @PutMapping("/pets/{id}/edit")
     Pet replacePet(@RequestBody Pet newPet, @PathVariable Integer id) {
 
         return petRepository.findById(id)
@@ -80,7 +81,7 @@ public class PetController {
                 });
     }
 
-    @DeleteMapping("/pets/{id}")
+    @DeleteMapping("/pets/{id}/delete")
     void deletePet(@PathVariable Integer id) {
         petRepository.deleteById(id);
     }
