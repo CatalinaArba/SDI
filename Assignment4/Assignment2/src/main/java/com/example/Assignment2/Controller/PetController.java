@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,13 @@ public class PetController {
     @GetMapping("/pets/price/{minPrice}")
     public List<Pet> byPrice(@PathVariable Integer minPrice) {
         return petRepository.findByPriceGreaterThanEqual(minPrice);
+    }
+
+    @GetMapping("/pets/price")
+    public List<Pet> sortByPrice() {
+        List<Pet> petsList=petRepository.findAll();
+        petsList.sort(Comparator.comparingInt(Pet::getPrice).reversed());
+        return petsList;
     }
 
 
