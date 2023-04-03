@@ -18,8 +18,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
-import { GlobalURL } from "../../main";
-import { BACKEND_API_URL } from "../../components";
 
 
 export const PetsShowAll = () => {
@@ -31,7 +29,6 @@ export const PetsShowAll = () => {
 		fetch(`/api/pets`)
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             setPets(data);
             setLoading(false);
           });
