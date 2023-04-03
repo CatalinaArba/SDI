@@ -13,14 +13,21 @@ export const PetUpdate = () => {
     const { id } = useParams();
 	const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
-	const [pet, setPet] = useState<Pet>({
-        id:0,
-		name: "",
-		petType:"",
-        age:0,
-        gender:"",
-        price:0,
-	});
+	const [pet, setPet] = useState<Pet>();
+	useEffect(() => {
+        const fetchPetDetails = async () => {
+            try {
+                const response = await fetch(`/pets/${id}/details`);
+                const petDetails = await response.json();
+                setPet(petDetails);
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchPetDetails();
+    }, [id]);
 
     useEffect(() => {
 		const fetchPet = async () => {
@@ -65,7 +72,7 @@ export const PetUpdate = () => {
 							variant="outlined"
 							fullWidth
 							sx={{ mb: 2 }}
-							value={pet.name}
+							value={pet.petType}
 							onChange={(event) => setPet({ ...pet, petType: event.target.value })}
 						/>
 
@@ -75,6 +82,7 @@ export const PetUpdate = () => {
 							variant="outlined"
 							fullWidth
 							sx={{ mb: 2 }}
+							value={pet.age}
 							onChange={(event) => setPet({ ...pet, age: parseInt(event.target.value) })}
 						/>
 
