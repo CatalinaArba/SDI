@@ -27,7 +27,7 @@ export const PetsShowAll = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch(GlobalURL+"/pets")
+        fetch(`${GlobalURL}+/pets`)
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
