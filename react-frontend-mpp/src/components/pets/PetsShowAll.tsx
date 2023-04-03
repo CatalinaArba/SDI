@@ -67,7 +67,7 @@ export const PetsShowAll = () => {
 			)}
 			{!loading && (
                 <Button sx={{color:"black"}} onClick={sortPets} >
-                    Sort swimmers
+                    Sort pets after names
                 </Button>
             )}
 			{!loading && pets.length > 0 && (
