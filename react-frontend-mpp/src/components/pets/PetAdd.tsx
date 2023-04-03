@@ -25,7 +25,7 @@ export const PetAdd = () => {
 		event.preventDefault();
 		try {
 			await axios.post(`/api/pets/add`, pet);
-			navigate("api/pets");
+			navigate("/pets");
 		} catch (error) {
 			console.log(error);
 		}

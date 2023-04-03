@@ -36,7 +36,7 @@ export const PetUpdate = () => {
 		event.preventDefault();
 		try {
 			await axios.put(`/api/pets/${id}/edit`, pet);
-			navigate("/api/pets");
+			navigate("/pets");
 		} catch (error) {
 			console.log(error);
 		}
