@@ -35,7 +35,7 @@ export const PetUpdate = () => {
 	const updatePet = async (event: { preventDefault: () => void }) => {
 		event.preventDefault();
 		try {
-			await axios.put(GlobalURL +`/pets/${id}/edit`, pet);
+			await axios.put(`api/pets/${id}/edit`, pet);
 			navigate("/pets");
 		} catch (error) {
 			console.log(error);
