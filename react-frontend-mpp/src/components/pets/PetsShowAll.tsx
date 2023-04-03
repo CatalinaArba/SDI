@@ -66,7 +66,7 @@ export const PetsShowAll = () => {
                 </div>
 			)}
 			{!loading && (
-                <Button sx={{color:"black"}} onClick={sortPets} >
+                <Button sx={{color:"pink"}} onClick={sortPets} >
                     Sort pets after names
                 </Button>
             )}
