@@ -11,6 +11,7 @@ import {
 	Container,
 	IconButton,
 	Tooltip,
+	Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
@@ -34,6 +35,20 @@ export const PetsShowAll = () => {
           });
       }, []);
 
+	  const sortPets = () => {
+        const sortedPets = [...pets].sort((a: Pet, b: Pet) => {
+            if (a.name < b.name) {
+                return -1;
+            }
+            if (a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        })
+        console.log(sortedPets);
+        setPets(sortedPets);
+    }
+
 
     return (
 		<Container>
@@ -50,6 +65,11 @@ export const PetsShowAll = () => {
 				</IconButton>
                 </div>
 			)}
+			{!loading && (
+                <Button sx={{color:"black"}} onClick={sortPets} >
+                    Sort swimmers
+                </Button>
+            )}
 			{!loading && pets.length > 0 && (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
