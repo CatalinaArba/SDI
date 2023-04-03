@@ -19,6 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
+import { BACKEND_API_URL } from "../../components";
 
 
 export const PetsShowAll = () => {
@@ -27,7 +28,7 @@ export const PetsShowAll = () => {
 
     useEffect(() => {
         setLoading(true);
-		fetch("/api/pets/")
+		fetch(`${BACKEND_API_URL}/pets`)
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
