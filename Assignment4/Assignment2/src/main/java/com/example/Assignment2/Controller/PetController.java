@@ -46,13 +46,13 @@ public class PetController {
         //return petRepository.findAll().stream().map(m->m.toPetDTOWithId()).collect(Collectors.toList());
     }
 
-    @PostMapping("api/pets/add")
+    @PostMapping("/pets/add")
     Pet newPet(@Valid @RequestBody Pet newPet) {
         return petRepository.save(newPet);
     }
 
     // Single item
-    @GetMapping("api/pets/{id}/details")
+    @GetMapping("/pets/{id}/details")
     PetDTO one(@PathVariable String id) {
         Integer intId=Integer.parseInt(id);
         if (petRepository.findById(intId).isEmpty())
@@ -64,7 +64,7 @@ public class PetController {
 
     }
 
-    @PutMapping("api/pets/{id}/edit")
+    @PutMapping("/pets/{id}/edit")
     Pet replacePet(@RequestBody Pet newPet, @PathVariable Integer id) {
 
         return petRepository.findById(id)
@@ -82,17 +82,17 @@ public class PetController {
                 });
     }
 
-    @DeleteMapping("api/pets/{id}/delete")
+    @DeleteMapping("/pets/{id}/delete")
     void deletePet(@PathVariable Integer id) {
         petRepository.deleteById(id);
     }
 
-    @GetMapping("api/pets/price/{minPrice}")
+    @GetMapping("/pets/price/{minPrice}")
     public List<Pet> byPrice(@PathVariable Integer minPrice) {
         return petRepository.findByPriceGreaterThanEqual(minPrice);
     }
 
-    @GetMapping("api/pets/price")
+    @GetMapping("/pets/price")
     public List<Pet> sortByPrice() {
         List<Pet> petsList=petRepository.findAll();
         petsList.sort(Comparator.comparingInt(Pet::getPrice).reversed());
