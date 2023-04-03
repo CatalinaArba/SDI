@@ -33,7 +33,7 @@ public class PetController {
 
     // Aggregate root
     // tag::get-aggregate-root[]
-    @GetMapping("api/pets")
+    @GetMapping("/pets")
     List<PetDTOWithId> all() {
         ModelMapper modelMapper= new ModelMapper();
         modelMapper.typeMap(Pet.class, PetDTOWithId.class);
