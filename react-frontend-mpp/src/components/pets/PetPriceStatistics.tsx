@@ -12,29 +12,30 @@ import {
 	IconButton,
 	Tooltip,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { GlobalURL } from "../../main";
 
 
-export const PetsShowAll = () => {
+export const PetPriceStatistics = () => {
     const [loading, setLoading] = useState(false);
-    const [pets, setPets] = useState<Pet[]>([]);
+	const [pets, setPets] = useState([]);
+
 
     useEffect(() => {
         setLoading(true);
-        fetch(GlobalURL+"/pets")
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            setPets(data);
-            setLoading(false);
-          });
-      }, []);
+        fetch(GlobalURL +`/pets/price`)
+            .then((res) => res.json())
+            .then((data) => {
+                setPets(data),
+                setLoading(false);
+            });
+    },[]);    
+
 
 
     return (
@@ -43,15 +44,6 @@ export const PetsShowAll = () => {
 
 			{loading && <CircularProgress />}
 			{!loading && pets.length === 0 && <p>No pets found</p>}
-			{!loading && (
-				<div style={{display:'flex', alignItems:'center'}}>
-                <IconButton component={Link} sx={{mr: 3 }} to={`/pets/add`}>
-					<Tooltip title="Add a new pet" arrow>
-						<AddIcon color="primary" />
-					</Tooltip>
-				</IconButton>
-                </div>
-			)}
 			{!loading && pets.length > 0 && (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -62,8 +54,10 @@ export const PetsShowAll = () => {
 								<TableCell align="right">Type</TableCell>
 								<TableCell align="right">Age</TableCell>
 								<TableCell align="center">Gender</TableCell>
-                                <TableCell align="center">Price</TableCell>
-                                <TableCell align="center">Options</TableCell>
+                                <TableCell align="center">
+                                     <b style={{fontWeight: 'bold'}}>Price</b>
+                                 </TableCell>
+                                 <TableCell align="center">Details</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -80,7 +74,9 @@ export const PetsShowAll = () => {
                                     <TableCell align="right">{pet.petType}</TableCell>
 								    <TableCell align="right">{pet.age}</TableCell>
 								    <TableCell align="center">{pet.gender}</TableCell>
-                                    <TableCell align="center">{pet.price}</TableCell>
+                                    <TableCell align="center">
+                                         <b style={{fontWeight: 'bold'}}>{pet.price}</b>
+                                    </TableCell>
 									<TableCell align="right">
 										<IconButton
 											component={Link}
@@ -91,13 +87,6 @@ export const PetsShowAll = () => {
 											</Tooltip>
 										</IconButton>
 
-										<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/${pet.id}/edit`} title="Edit pet details">
-											<EditIcon />
-										</IconButton>
-
-										<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/${pet.id}/delete`} title="Delete pet">
-											<DeleteForeverIcon sx={{ color: "red" }} />
-										</IconButton>
 									</TableCell>
 								</TableRow>
 							))}

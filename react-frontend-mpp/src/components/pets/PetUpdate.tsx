@@ -9,9 +9,10 @@ import axios from "axios";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 
-export const PetAdd = () => {
+export const PetUpdate = () => {
+    const { id } = useParams();
 	const navigate = useNavigate();
-
+    const [loading, setLoading] = useState(true)
 	const [pet, setPet] = useState<Pet>({
         id:0,
 		name: "",
@@ -21,10 +22,20 @@ export const PetAdd = () => {
         price:0,
 	});
 
-	const addPet = async (event: { preventDefault: () => void }) => {
+    useEffect(() => {
+		const fetchPet = async () => {
+			const response = await fetch(`../../pet/${id}/edit`);
+			const fetchedPet = await response.json();
+			setPet(fetchedPet);
+			setLoading(false);
+		};
+		fetchPet();
+	}, [id]);
+
+	const updatePet = async (event: { preventDefault: () => void }) => {
 		event.preventDefault();
 		try {
-			await axios.post(GlobalURL +`/pets/add`, pet);
+			await axios.put(GlobalURL +`/pets/${id}/edit`, pet);
 			navigate("/pets");
 		} catch (error) {
 			console.log(error);
@@ -38,7 +49,7 @@ export const PetAdd = () => {
 					<IconButton component={Link} sx={{ mr: 3 }} to={`/pets`}>
 						<ArrowBackIcon />
 					</IconButton>{" "}
-					<form onSubmit={addPet}>
+					<form onSubmit={updatePet}>
 						<TextField
 							id="name"
 							label="Name"
@@ -82,7 +93,7 @@ export const PetAdd = () => {
 							sx={{ mb: 2 }}
 							onChange={(event) => setPet({ ...pet, price: parseInt(event.target.value) })}
 						/>
-						<Button type="submit">Add pet</Button>
+						<Button type="submit">Update pet details</Button>
 					</form>
 				</CardContent>
 				<CardActions></CardActions>
