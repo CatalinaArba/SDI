@@ -24,8 +24,8 @@ export const PetAdd = () => {
 	const addPet = async (event: { preventDefault: () => void }) => {
 		event.preventDefault();
 		try {
-			await axios.post(GlobalURL +`/pets/add`, pet);
-			navigate("/pets");
+			await axios.post(`/api/pets/add`, pet);
+			navigate("api/pets");
 		} catch (error) {
 			console.log(error);
 		}

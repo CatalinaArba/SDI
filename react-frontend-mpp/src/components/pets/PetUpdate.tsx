@@ -24,7 +24,7 @@ export const PetUpdate = () => {
 
     useEffect(() => {
 		const fetchPet = async () => {
-			const response = await fetch(`../../pet/${id}/edit`);
+			const response = await fetch(`../../api/pet/${id}/edit`);
 			const fetchedPet = await response.json();
 			setPet(fetchedPet);
 			setLoading(false);

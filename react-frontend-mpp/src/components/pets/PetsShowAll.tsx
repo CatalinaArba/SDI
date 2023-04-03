@@ -28,7 +28,7 @@ export const PetsShowAll = () => {
 
     useEffect(() => {
         setLoading(true);
-		fetch(`${BACKEND_API_URL}/pets`)
+		fetch(`/api/pets`)
           .then((res) => res.json())
           .then((data) => {
             console.log(data);

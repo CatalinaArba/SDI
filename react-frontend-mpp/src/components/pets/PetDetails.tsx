@@ -15,7 +15,7 @@ export const PetDetails = () => {
         const fetchPet = async () => {
           try {
             
-            const response = await fetch(GlobalURL+`/pets/${id}/details`);
+            const response = await fetch(`/api/pets/${id}/details`);
             const data = await response.json();
             setPet(data);
             console.log(`Pet name: ${data.name}`);
