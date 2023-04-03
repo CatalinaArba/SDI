@@ -1,2 +1,2 @@
 /* /index.html 200
-/api/* http://ec2-16-170-108-52.eu-north-1.compute.amazonaws.com/com/example/Assignment2/:splat 200!
+/api/* http://ec2-16-170-108-52.eu-north-1.compute.amazonaws.com:80/:splat 200!

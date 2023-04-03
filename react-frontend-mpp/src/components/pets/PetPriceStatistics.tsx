@@ -28,7 +28,7 @@ export const PetPriceStatistics = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch(GlobalURL +`/pets/price`)
+        fetch(`/api/pets/price`)
             .then((res) => res.json())
             .then((data) => {
                 setPets(data),
