@@ -6,6 +6,7 @@ import com.example.Assignment2.Model.*;
 import com.example.Assignment2.Repository.IAdoptionCustomerRepository;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
+import com.example.Assignment2.Service.AdoptionService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,39 +22,24 @@ import java.util.stream.Collectors;
 
 @RestController
 public class AdoptionController {
+
     @Autowired
-    private final IAdoptionRepository adoptionRepository;
+    private final AdoptionService adoptionService;
 
-    private IAdoptionCustomerRepository adoptionCustomerRepository;
-    private final IPetRepository petRepository;
 
-    public AdoptionController(IAdoptionRepository adoptionRepository, IPetRepository petRepository,IAdoptionCustomerRepository adoptionCustomerRepository) {
-        this.adoptionCustomerRepository=adoptionCustomerRepository;
-        this.adoptionRepository = adoptionRepository;
-        this.petRepository = petRepository;
+    public AdoptionController(AdoptionService adoptionService) {
+        this.adoptionService = adoptionService;
     }
 
     @GetMapping("/adoptions")
     List<AdoptionDTO> all() {
-        ModelMapper modelMapper = new ModelMapper();
-        List<Adoption> adoptions = adoptionRepository.findAll();
-        List<AdoptionDTO> adoptionDTOs = adoptions.stream()
-                .map(adoption -> modelMapper.map(adoption, AdoptionDTO.class))
-                .collect(Collectors.toList());
-        return adoptionDTOs;
+        return adoptionService.all();
     }
 
 
     @PostMapping("/adoptions/{petId}")
     Adoption newAdoption(@Valid @RequestBody Adoption newAdoption, @PathVariable Integer petId) {
-        Pet pet=petRepository.findById(petId).get();
-        List<Pet> petList=new ArrayList<>();
-        petList.add(pet);
-        newAdoption.setPet(petList);
-        //newAdoption.getAdoptionCustomers().isEmpty();
-        newAdoption=adoptionRepository.save(newAdoption);
-        pet.setAdoption(newAdoption);
-        return newAdoption;
+        return adoptionService.newAdoption(newAdoption,petId);
     }
 
     /*@PostMapping("/adoptions/{adoptionId}/pets")
@@ -88,74 +74,29 @@ public class AdoptionController {
         }
     }*/
 
-    // Single item
+
     @GetMapping("/adoptions/{id}")
     AdoptionDTOWithCustomerIds one(@PathVariable Integer id) {
 
-        if (adoptionRepository.findById(id).isEmpty())
-            throw new PetNotFoundException(id);
-
-        Adoption adoption=adoptionRepository.findById(id).get();
-        AdoptionDTOWithCustomerIds adoptionDTOWithCustomerIds=new AdoptionDTOWithCustomerIds();
-
-        List<Integer> customersIds=new ArrayList<>();
-        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
-        for(AdoptionCustomer ac:adoptionCustomers)
-            if(ac.getAdoptionAdoptionCustomer().getId()== adoption.getId())
-                customersIds.add(ac.getCustomerAdoptionCustomer().getId());
-        adoptionDTOWithCustomerIds.setCustomersIds(customersIds);
-        adoptionDTOWithCustomerIds.setAdoption(adoption);
-
-        return  adoptionDTOWithCustomerIds;
+        return adoptionService.one(id);
     }
 
     @PutMapping("/adoptions/{id}")
     Adoption replaceAdoption(@RequestBody Adoption newAdoption, @PathVariable Integer id) {
 
-        Adoption oldAdoption=adoptionRepository.findById(id).get();
-        return adoptionRepository.findById(id)
-                .map(adoption -> {
-                    adoption.setAdoptionDate(newAdoption.getAdoptionDate());
-                    adoption.setAdoptionFee(newAdoption.getAdoptionFee());
-                    adoption.setAdoptionLocation(newAdoption.getAdoptionLocation());
-                    adoption.setAdoptionNotes(newAdoption.getAdoptionNotes());
-                    adoption.setAdoptionStatus(newAdoption.getAdoptionStatus());
-                    adoption.setPet(oldAdoption.getPet());
-                    adoption.setAdoptionCustomers(oldAdoption.getAdoptionCustomers());
-                    return adoptionRepository.save(adoption);
-                })
-                .orElseGet(() -> {
-                    newAdoption.setId(id);
-                    return adoptionRepository.save(newAdoption);
-                });
+        return adoptionService.replaceAdoption(newAdoption,id);
     }
 
     @DeleteMapping("/adoptions/{id}")
     void deleteAdoption(@PathVariable Integer id) {
-        adoptionRepository.deleteById(id);
+
+        adoptionService.deleteAdoption(id);
     }
 
     //all the adoptions ordered by the average pet's price
     @GetMapping("/adoptions/statistics")
     public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice() {
-        List<Adoption> adoptions = adoptionRepository.findAll();
-        List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
-        for (Adoption adoption : adoptions) {
-            double sum = 0.0;
-            int count = 0;
-            for (Pet pet : adoption.getPet()) {
-                sum += pet.getPrice();
-                count++;
-            }
-            double avgPrice = count > 0 ? sum / count : 0.0;
-            avgPrice=Math.round(avgPrice * 100.0) / 100.0;
-            AdoptionDTOStatisticsPetsPrice adoptionDTOStatisticsPetsPrice = modelMapper.map(adoption, AdoptionDTOStatisticsPetsPrice.class);
-            adoptionDTOStatisticsPetsPrice.setAvgPetPrice(avgPrice);
-            adoptionDTOStatisticsPetsPrices.add(adoptionDTOStatisticsPetsPrice);
-        }
-        adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
-        return adoptionDTOStatisticsPetsPrices;
+        return adoptionService.getAllAdoptionsOrderByAvgPetPrice();
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)
