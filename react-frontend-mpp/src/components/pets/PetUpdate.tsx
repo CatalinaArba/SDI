@@ -56,6 +56,7 @@ export const PetUpdate = () => {
 							variant="outlined"
 							fullWidth
 							sx={{ mb: 2 }}
+							value={pet.name}
 							onChange={(event) => setPet({ ...pet, name: event.target.value })}
 						/>
 						<TextField
@@ -64,6 +65,7 @@ export const PetUpdate = () => {
 							variant="outlined"
 							fullWidth
 							sx={{ mb: 2 }}
+							value={pet.name}
 							onChange={(event) => setPet({ ...pet, petType: event.target.value })}
 						/>
 
