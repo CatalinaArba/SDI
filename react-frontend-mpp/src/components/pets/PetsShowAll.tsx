@@ -22,7 +22,7 @@ import { Pet } from "../../models/Pets";
 
 export const PetsShowAll = () => {
     const [loading, setLoading] = useState(false);
-    const [pets, setPets] = useState<Pet[]>([]);
+    const [pets, setPets] = useState([]);
 
     useEffect(() => {
         setLoading(true);
