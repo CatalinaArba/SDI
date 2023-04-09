@@ -8,6 +8,7 @@ import com.example.Assignment2.Repository.IPetRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,8 @@ public class PetService {
     public List<PetDTOWithId> all() {
         ModelMapper modelMapper= new ModelMapper();
         modelMapper.typeMap(Pet.class, PetDTOWithId.class);
-        List<PetDTOWithId> petDTOsWithIds = petRepository.findAll().stream()
+        PageRequest pageRequest = PageRequest.of(0, 50);
+        List<PetDTOWithId> petDTOsWithIds = petRepository.findAll(pageRequest).stream()
                 .map(pet -> modelMapper.map(pet, PetDTOWithId.class))
                 .collect(Collectors.toList());
         return petDTOsWithIds;
