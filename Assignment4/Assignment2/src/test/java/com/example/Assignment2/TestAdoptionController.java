@@ -50,10 +50,10 @@ public class TestAdoptionController {
     @Test
     public void testGetAllAdoptionsOrderByAvgPetPrice() {
         // Create test data
-        Pet pet1 = new Pet("Fido", "dob", 10, "Male", 100);
-        Pet pet2 = new Pet("Whiskers", "cat", 4, "Male", 75);
+        Pet pet1 = new Pet("Fido", "dob", 10, "Male", 100,"Cool");
+        Pet pet2 = new Pet("Whiskers", "cat", 4, "Male", 75,"Amazing");
         Adoption adoption1 = new Adoption(LocalDate.of(2022, 4, 1), 160, "in process", "Campia turzii, Cluj", "All good", Arrays.asList(pet1, pet2));
-        Pet pet3 = new Pet("Tweety", "bird", 1, "Male", 50);
+        Pet pet3 = new Pet("Tweety", "bird", 1, "Male", 50,"Super");
         Adoption adoption2 = new Adoption(LocalDate.of(2023, 3, 11), 100, "Done", "Cluj-Napoca, Cluj", "All fine!", Arrays.asList(pet3));
         List<Adoption> adoptions = Arrays.asList(adoption1, adoption2);
 

@@ -10,6 +10,8 @@ import com.example.Assignment2.Service.PetService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +33,15 @@ public class PetController {
         this.petService = petService;
 
     }
+    @GetMapping("/pets/count")
+    Integer countAll() {
+        return petService.countAll();
+    }
 
-
-    @GetMapping("/pets")
-    List<PetDTOWithId> all() {
-        return petService.all();
+    @GetMapping("/pets/page/{page}/size/{size}")
+    List<PetDTOWithId> all(@PathVariable int page, @PathVariable int size) {
+        PageRequest pr=PageRequest.of(page,size);
+        return petService.all(pr);
     }
 
     @PostMapping("/pets/add")

@@ -7,7 +7,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { Pet } from "../../models/Pets";
-import { GlobalURL } from "../../main";
 
 export const PetUpdate = () => {
     const { id } = useParams();
@@ -29,6 +28,7 @@ export const PetUpdate = () => {
 			setPet(fetchedPet);
 			setLoading(false);
 		};
+		
 		fetchPet();
 	}, [id]);
 

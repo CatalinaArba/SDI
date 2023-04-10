@@ -29,8 +29,8 @@ public class TestPetController {
 
     @Test
     public void testByPriceEndpoint() throws Exception {
-        Pet pet1 = new Pet("Fluffy", "cat",1,"Male", 100);
-        Pet pet2 = new Pet("Rex", "dog", 2,"Male",200);
+        Pet pet1 = new Pet("Fluffy", "cat",1,"Male", 100,"wow");
+        Pet pet2 = new Pet("Rex", "dog", 2,"Male",200,"Wonderful");
         List<Pet> pets = Arrays.asList(pet1, pet2);
         List<Pet> expensivePets2 = Arrays.asList(pet2);
 

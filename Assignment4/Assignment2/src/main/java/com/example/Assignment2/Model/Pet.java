@@ -17,18 +17,20 @@ public class Pet {
     private Integer age;
     private String gender;
     private Integer price;
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adoption_id")
     @JsonIgnore
     Adoption adoption;
 
-    public Pet(String name, String petType, Integer age, String gender, Integer price) {
+    public Pet(String name, String petType, Integer age, String gender, Integer price,String description) {
         this.name = name;
         this.petType = petType;
         this.age = age;
         this.gender = gender;
         this.price = price;
+        this.description=description;
     }
 
     public Pet() {
