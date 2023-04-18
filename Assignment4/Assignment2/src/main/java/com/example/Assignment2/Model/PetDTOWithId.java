@@ -9,8 +9,17 @@ public class PetDTOWithId {
     private Integer price;
 
     private Integer adoptionId;
+    private String description;
 
     public PetDTOWithId() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {

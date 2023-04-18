@@ -24,7 +24,15 @@ public class Pet {
     @JsonIgnore
     Adoption adoption;
 
-    public Pet(String name, String petType, Integer age, String gender, Integer price,String description) {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Pet(String name, String petType, Integer age, String gender, Integer price, String description) {
         this.name = name;
         this.petType = petType;
         this.age = age;
