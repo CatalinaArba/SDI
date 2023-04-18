@@ -34,7 +34,7 @@ public class PetController {
 
     }
     @GetMapping("/pets/count")
-    Integer countAll() {
+    Long countAll() {
         return petService.countAll();
     }
 

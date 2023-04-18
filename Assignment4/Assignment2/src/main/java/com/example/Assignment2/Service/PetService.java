@@ -28,8 +28,8 @@ public class PetService {
         this.petRepository = petRepository;
     }
 
-    public Integer countAll(){
-        return petRepository.findAll().size();
+    public Long countAll(){
+        return petRepository.count();
     }
     public List<PetDTOWithId> all(PageRequest pr) {
         ModelMapper modelMapper= new ModelMapper();

@@ -41,10 +41,12 @@ export const PetsShowAll = () => {
 		const fetchRecLbl = () => {
 		  //fetch(GlobalURL+`/pets/count`)
 		  fetch(`${BACKEND_API_URL}/pets/count`)
+		  //fetch(`http://16.16.143.73:80/pets/count`)
 		  .then((response) => response.json())
 		  .then((count) => {
 			//fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
 			fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
+			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
 			.then((response) => response.json())
 			.then((data) => {
 			  setTotalPets(count);
@@ -106,7 +108,7 @@ export const PetsShowAll = () => {
 			<h1>All pets</h1>
 
 			{loading && <CircularProgress />}
-			{!loading && pets.length === 0 && <p>No pets found</p>}
+			{!loading && totalPets === 0 && <p>No pets found</p>}
 			{!loading && (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/add`}>
