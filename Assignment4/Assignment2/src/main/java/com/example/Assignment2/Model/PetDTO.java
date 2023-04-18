@@ -8,10 +8,18 @@ public class PetDTO {
     private Integer age;
     private String gender;
     private Integer price;
-
+    private String description;
     private AdoptionDTO adoption;
 
     public PetDTO() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {

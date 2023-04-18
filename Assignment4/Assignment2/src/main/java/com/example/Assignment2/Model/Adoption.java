@@ -45,6 +45,8 @@ public class Adoption {
         this.pet = pet;
     }
 
+    public Adoption() {
+    }
     public List<AdoptionCustomer> getAdoptionCustomers() {
         return adoptionCustomers;
     }
@@ -52,10 +54,6 @@ public class Adoption {
     public void setAdoptionCustomers(List<AdoptionCustomer> adoptionCustomers) {
         this.adoptionCustomers = adoptionCustomers;
     }
-
-    public Adoption() {
-    }
-
     public List<Pet> getPet() {
         return pet;
     }
