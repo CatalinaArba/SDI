@@ -19,6 +19,7 @@ export const PetAdd = () => {
         age:0,
         gender:"",
         price:0,
+		description:"",
 	});
 
 	const addPet = async (event: { preventDefault: () => void }) => {

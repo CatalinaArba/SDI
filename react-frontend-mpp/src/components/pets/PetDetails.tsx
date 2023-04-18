@@ -43,6 +43,7 @@ export const PetDetails = () => {
 					<p>Pet Age : {pet?.age}</p>
                     <p>Pet Gender : {pet?.gender}</p>
                     <p>Pet Price : {pet?.price}</p>
+					<p>Pet Description : {pet?.description}</p>
                     <p>Adoption date:{pet?.adoption?.adoptionDate}</p>
                     <p>Adoption fee:{pet?.adoption?.adoptionFee}</p>
                     <p>Adoption location:{pet?.adoption?.adoptionLocation}</p>

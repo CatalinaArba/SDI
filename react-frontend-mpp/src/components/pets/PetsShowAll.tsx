@@ -25,6 +25,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
 import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { GlobalURL } from "../../main";
+import { BACKEND_API_URL } from "../../components";
 
 export const PetsShowAll = () => {
 	const [loading, setLoading] = useState(false);
@@ -38,10 +39,12 @@ export const PetsShowAll = () => {
 		setLoading(true);
   
 		const fetchRecLbl = () => {
-		  fetch(GlobalURL+`/pets/count`)
+		  //fetch(GlobalURL+`/pets/count`)
+		  fetch(`${BACKEND_API_URL}/pets/count`)
 		  .then((response) => response.json())
 		  .then((count) => {
-			fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
+			//fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
+			fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
 			.then((response) => response.json())
 			.then((data) => {
 			  setTotalPets(count);

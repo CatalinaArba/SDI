@@ -19,6 +19,7 @@ export const PetUpdate = () => {
         age:0,
         gender:"",
         price:0,
+		description:""
 	});
 	
     useEffect(() => {

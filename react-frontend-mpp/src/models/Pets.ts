@@ -7,5 +7,7 @@ export interface Pet{
     age:number;
     gender:string
     price:number;
+    description:string;
     adoption?:Adoption;
+    
 }
