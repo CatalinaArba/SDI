@@ -7,6 +7,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
+import { BACKEND_API_URL } from "../../components";
 
 export const PetDetails = () => {
 	const { id} = useParams<{ id: string }>();
@@ -15,7 +16,7 @@ export const PetDetails = () => {
         const fetchPet = async () => {
           try {
             
-            const response = await fetch(`/api/pets/${id}/details`);
+            const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
             const data = await response.json();
             setPet(data);
             console.log(`Pet name: ${data.name}`);
