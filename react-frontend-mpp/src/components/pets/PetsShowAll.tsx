@@ -108,7 +108,6 @@ export const PetsShowAll = () => {
 			<h1>All pets</h1>
 
 			{loading && <CircularProgress />}
-			{!loading && totalPets === 0 && <p>No pets found</p>}
 			{!loading && (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/add`}>
@@ -118,6 +117,7 @@ export const PetsShowAll = () => {
 					</IconButton>
 				</div>
 			)}
+			{!loading && totalPets === 0 && <p>No pets found</p>}
 			{!loading && (<div>
 				<Button sx={{ color: "pink" }} onClick={sortPets} >
 					Sort pets after names
@@ -209,9 +209,10 @@ export const PetsShowAll = () => {
 
 		</Container >
 
-
+		
 
 	);
+	
 
 }
 
