@@ -7,11 +7,15 @@ import com.example.Assignment2.Model.*;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
 import com.example.Assignment2.Service.PetService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +49,7 @@ public class PetController {
     }
 
     @PostMapping("/pets/add")
-    Pet newPet(@Valid @RequestBody Pet newPet) {
+    Pet newPet(@Valid @RequestBody PetDTOWithId newPet) {
         return petService.newPet(newPet);
     }
 
@@ -87,4 +91,11 @@ public class PetController {
         });
         return errors;
     }
+
+    @GetMapping("/pets/autocomplete")
+    public List<Pet> get(@RequestParam String query)
+    {
+        return this.petService.getPetIdAutocomplete(query);
+    }
+
 }

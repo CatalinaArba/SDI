@@ -60,4 +60,11 @@ public class CustomerController {
     {
        return customerService.statisticsNoCustomers();
     }
+
+    @GetMapping("/customers/autocomplete")
+    public List<Customer> getCustomersSuggestions(@RequestParam String query)
+    {
+        return this.customerService.getCustomersNameAutocomplete(query);
+    }
+
 }

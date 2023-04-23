@@ -1,12 +1,15 @@
 package com.example.Assignment2.Service;
 
 import com.example.Assignment2.Exception.PetNotFoundException;
+import com.example.Assignment2.Model.Adoption;
 import com.example.Assignment2.Model.Pet;
 import com.example.Assignment2.Model.PetDTO;
 import com.example.Assignment2.Model.PetDTOWithId;
+import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.IPetRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +26,11 @@ import java.util.stream.Collectors;
 @Service
 public class PetService {
     private final IPetRepository petRepository;
+    private final IAdoptionRepository adoptionRepository;
 
-    public PetService(IPetRepository petRepository) {
+    public PetService(IPetRepository petRepository,IAdoptionRepository adoptionRepository) {
         this.petRepository = petRepository;
+        this.adoptionRepository=adoptionRepository;
     }
 
     public Long countAll(){
@@ -43,8 +48,22 @@ public class PetService {
         //Same thing using map function: it works
         //return petRepository.findAll().stream().map(m->m.toPetDTOWithId()).collect(Collectors.toList());
     }
-    public Pet newPet( Pet newPet) {
-        return petRepository.save(newPet);
+    public Pet newPet( PetDTOWithId newPet) {
+        Adoption adoption=adoptionRepository.findById(newPet.getAdoptionId()).get();
+        ModelMapper modelMapper = new ModelMapper();
+        TypeMap<PetDTOWithId, Pet> typeMap = modelMapper.createTypeMap(PetDTOWithId.class, Pet.class);
+//        typeMap.addMappings(mapping -> {
+//            mapping.map(PetDTOWithId::getName, Pet::setName);
+//            mapping.map(PetDTOWithId::getAge, Pet::setAge);
+//            mapping.map(PetDTOWithId::getPetType, Pet::setPetType);
+//            mapping.map(PetDTOWithId::getDescription, Pet::setDescription);
+//            mapping.map(PetDTOWithId::getGender, Pet::setGender);
+//            mapping.map(PetDTOWithId::getPrice, Pet::setPrice);
+//        });
+        Pet pet = modelMapper.map(newPet, Pet.class);
+        pet.setAdoption(adoption);
+
+        return petRepository.save(pet);
     }
 
     public PetDTO one( String id) {
@@ -87,5 +106,15 @@ public class PetService {
         List<Pet> petsList=petRepository.findAll();
         petsList.sort(Comparator.comparingInt(Pet::getPrice).reversed());
         return petsList;
+    }
+
+    public List<Pet> getPetIdAutocomplete( String query)
+    {
+
+        List<Pet> pets=petRepository.findAll();
+
+        return pets.stream()
+                .filter(pet -> pet.getId().toString().startsWith(query))
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,7 @@ import com.example.Assignment2.Repository.ICustomerRepository;
 import com.example.Assignment2.Service.AdoptionCustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,15 +25,20 @@ public class AdoptionCustomerController {
         this.adoptionCustomerService = adoptionCustomerService;
     }
 
-    @GetMapping("/adoptionCustomer")
-    public List<AdoptionCustomerDTOWithId> all() {
-       return adoptionCustomerService.all();
+    @GetMapping("/adoptionCustomer/page/{page}/size/{size}")
+    public List<AdoptionCustomerDTOWithId> all(@PathVariable int page, @PathVariable int size) {
+        PageRequest pr=PageRequest.of(page,size);
+        return adoptionCustomerService.all(pr);
     }
 
+    @GetMapping("/adoptionCustomer/count")
+    Long countAll() {
+        return adoptionCustomerService.countAll();
+    }
 
-    @PostMapping("/adoptionCustomer/{adoptionId}/{customerId}")
-    AdoptionCustomer newAdoptonCustomer(@RequestBody AdoptionCustomer newAdoptionCustomer,@PathVariable Integer adoptionId,@PathVariable Integer customerId) {
-        return adoptionCustomerService.newAdoptonCustomer(newAdoptionCustomer,adoptionId,customerId);
+    @PostMapping("/adoptionCustomer")
+    AdoptionCustomer newAdoptonCustomer(@RequestBody AdoptionCustomerDTOWithId newAdoptionCustomer) {
+        return adoptionCustomerService.newAdoptonCustomer(newAdoptionCustomer);
     }
 
     @PostMapping("/adoptionCustomer/{customerId}")

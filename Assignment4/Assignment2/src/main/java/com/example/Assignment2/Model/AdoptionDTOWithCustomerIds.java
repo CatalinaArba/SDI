@@ -24,4 +24,6 @@ public class AdoptionDTOWithCustomerIds {
     public void setCustomersIds(List<Integer> customersIds) {
         this.customersIds = customersIds;
     }
+
+
 }

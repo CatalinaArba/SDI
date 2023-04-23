@@ -18,7 +18,7 @@ public class Adoption {
     private @Id
     @GeneratedValue Integer id;
 
-    @NotBlank(message ="Adoption date is mandatory")
+    @NotNull(message ="Adoption date is mandatory")
     private LocalDate adoptionDate;
     @Min(value=1, message ="Adoption fee should be more than 0")
     private Integer adoptionFee;
@@ -36,14 +36,22 @@ public class Adoption {
     @OneToMany(mappedBy = "adoptionAdoptionCustomer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<AdoptionCustomer> adoptionCustomers;
 
-    public Adoption(LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes, List<Pet> pet) {
+    public Adoption(LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes) {
         this.adoptionDate = adoptionDate;
         this.adoptionFee = adoptionFee;
         this.adoptionStatus = adoptionStatus;
         this.adoptionLocation = adoptionLocation;
         this.adoptionNotes = adoptionNotes;
-        this.pet = pet;
     }
+
+//    public Adoption(LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes, List<Pet> pet) {
+//        this.adoptionDate = adoptionDate;
+//        this.adoptionFee = adoptionFee;
+//        this.adoptionStatus = adoptionStatus;
+//        this.adoptionLocation = adoptionLocation;
+//        this.adoptionNotes = adoptionNotes;
+//        this.pet = pet;
+//    }
 
     public Adoption() {
     }

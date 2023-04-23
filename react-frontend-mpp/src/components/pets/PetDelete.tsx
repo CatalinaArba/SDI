@@ -10,8 +10,9 @@ export const PetDelete = () => {
 
 	const handleDelete = async (event: { preventDefault: () => void }) => {
 		event.preventDefault();
-		await axios.delete(`/api/pets/${id}/delete`);
+		//await axios.delete(`/api/pets/${id}/delete`);
 		// go to courses list
+		await axios.delete(GlobalURL+`/pets/${id}/delete`);
 		navigate("/pets");
 	};
 

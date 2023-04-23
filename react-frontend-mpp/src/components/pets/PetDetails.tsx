@@ -15,8 +15,8 @@ export const PetDetails = () => {
 	useEffect(() => {
         const fetchPet = async () => {
           try {
-            
-            const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+			const response = await fetch(GlobalURL+`/pets/${id}/details`);
+            //const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
             const data = await response.json();
             setPet(data);
             console.log(`Pet name: ${data.name}`);
@@ -45,6 +45,7 @@ export const PetDetails = () => {
                     <p>Pet Gender : {pet?.gender}</p>
                     <p>Pet Price : {pet?.price}</p>
 					<p>Pet Description : {pet?.description}</p>
+					<p>Adoption id:{pet?.adoption?.id}</p>
                     <p>Adoption date:{pet?.adoption?.adoptionDate}</p>
                     <p>Adoption fee:{pet?.adoption?.adoptionFee}</p>
                     <p>Adoption location:{pet?.adoption?.adoptionLocation}</p>

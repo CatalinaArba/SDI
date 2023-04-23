@@ -8,6 +8,8 @@ import com.example.Assignment2.Repository.IPetRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,18 +33,26 @@ public class AdoptionService {
     }
 
 
-    public List<AdoptionDTO> all() {
+    public List<AdoptionDTO> all(PageRequest pr) {
         ModelMapper modelMapper = new ModelMapper();
-        List<Adoption> adoptions = adoptionRepository.findAll();
+        Page<Adoption> adoptions = adoptionRepository.findAll(pr);
         List<AdoptionDTO> adoptionDTOs = adoptions.stream()
                 .map(adoption -> modelMapper.map(adoption, AdoptionDTO.class))
                 .collect(Collectors.toList());
         return adoptionDTOs;
     }
 
+    public Long countAll(){
+        return adoptionRepository.count();
+    }
 
 
-    public Adoption newAdoption( Adoption newAdoption, Integer petId) {
+    public Adoption newAdoption(Adoption newAdoption)
+    {
+        return adoptionRepository.save(newAdoption);
+    }
+
+    public Adoption newAdoptionWithPetId( Adoption newAdoption, Integer petId) {
         Pet pet=petRepository.findById(petId).get();
         List<Pet> petList=new ArrayList<>();
         petList.add(pet);
@@ -86,8 +96,8 @@ public class AdoptionService {
     }*/
 
 
-    public AdoptionDTOWithCustomerIds one( Integer id) {
-
+    public AdoptionDTOWithCustomerIds one( String idString) {
+        Integer id=Integer.parseInt(idString);
         if (adoptionRepository.findById(id).isEmpty())
             throw new PetNotFoundException(id);
 
@@ -95,13 +105,16 @@ public class AdoptionService {
         AdoptionDTOWithCustomerIds adoptionDTOWithCustomerIds=new AdoptionDTOWithCustomerIds();
 
         List<Integer> customersIds=new ArrayList<>();
-        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
-        for(AdoptionCustomer ac:adoptionCustomers)
-            if(ac.getAdoptionAdoptionCustomer().getId()== adoption.getId())
+
+        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAdoptionCustomerByAdoptionAdoptionCustomerId(adoption.getId());
+        for(AdoptionCustomer ac:adoptionCustomers) {
+            if (ac.getAdoptionAdoptionCustomer().getId() == adoption.getId()) {
                 customersIds.add(ac.getCustomerAdoptionCustomer().getId());
+            }
+        }
+
         adoptionDTOWithCustomerIds.setCustomersIds(customersIds);
         adoptionDTOWithCustomerIds.setAdoption(adoption);
-
         return  adoptionDTOWithCustomerIds;
     }
 
@@ -151,5 +164,15 @@ public class AdoptionService {
         }
         adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
         return adoptionDTOStatisticsPetsPrices;
+    }
+
+    public List<Adoption> getAdoptionIdsAutocomplete( String query)
+    {
+
+        List<Adoption> adoptions=adoptionRepository.findAll();
+
+        return adoptions.stream()
+                .filter(adoption -> adoption.getId().toString().startsWith(query)).limit(20)
+                .collect(Collectors.toList());
     }
 }

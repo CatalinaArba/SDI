@@ -19,6 +19,8 @@ public class Pet {
     private Integer price;
     private String description;
 
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adoption_id")
     @JsonIgnore

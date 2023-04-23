@@ -116,4 +116,16 @@ public class CustomerService {
         finalList.sort(Comparator.comparingInt(CustomerDTOSatisticsNoCoustomer::getNoCustomers).reversed());
         return finalList;
     }
+
+    public List<Customer> getCustomersNameAutocomplete( String query)
+    {
+
+        List<Customer> customers=customerRepository.findAll();
+
+        return customers.stream()
+                .filter(adoption -> adoption.getFirstName().toLowerCase().contains(query.toLowerCase())).limit(20)
+                .collect(Collectors.toList());
+    }
+
+
 }

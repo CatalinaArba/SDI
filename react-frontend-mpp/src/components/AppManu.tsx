@@ -37,6 +37,26 @@ export const AppMenu = () => {
                         >
                         Pets
                     </Button>
+					<Button
+                        variant={path.startsWith("/adoptions") ? "outlined" : "text"}
+                        to="/adoptions"
+                        component={Link}
+                        color="inherit"
+                        sx={{ mr: 5 }}
+                        startIcon={<PetsIcon />}
+                        >
+                        Adoptions
+                    </Button>
+					<Button
+                        variant={path.startsWith("/adoptionCustomer") ? "outlined" : "text"}
+                        to="/adoptionCustomer"
+                        component={Link}
+                        color="inherit"
+                        sx={{ mr: 5 }}
+                        startIcon={<PetsIcon />}
+                        >
+                        Adoptions-Customer
+                    </Button>
                     <Button
 						variant={path.startsWith("/pets/price") ? "outlined" : "text"}
 						to="/pets/price"

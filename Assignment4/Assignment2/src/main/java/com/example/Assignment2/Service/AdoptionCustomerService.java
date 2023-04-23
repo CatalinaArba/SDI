@@ -6,7 +6,10 @@ import com.example.Assignment2.Repository.IAdoptionCustomerRepository;
 import com.example.Assignment2.Repository.IAdoptionRepository;
 import com.example.Assignment2.Repository.ICustomerRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +30,11 @@ public class AdoptionCustomerService {
         this.customerRepository = customerRepository;
     }
 
+    public Long countAll(){
+        return adoptionCustomerRepository.count();
+    }
 
-    public List<AdoptionCustomerDTOWithId> all() {
+    public List<AdoptionCustomerDTOWithId> all(PageRequest pr) {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.typeMap(AdoptionCustomer.class, AdoptionCustomerDTOWithId.class);
         //.addMapping(src -> src.getAdoptionAdoptionCustomer().getId(),
@@ -36,7 +42,7 @@ public class AdoptionCustomerService {
         //.addMapping(src -> src.getCustomerAdoptionCustomer().getId(),
         //      AdoptionCustomerDTOWithId::setIdCustomerAdoptionCustomer);
 
-        List<AdoptionCustomer> allAdoptionCustomers = adoptionCustomerRepository.findAll();
+        Page<AdoptionCustomer> allAdoptionCustomers = adoptionCustomerRepository.findAll(pr);
         return allAdoptionCustomers.stream()
                 .map(adoptionCustomer -> modelMapper.map(adoptionCustomer, AdoptionCustomerDTOWithId.class))
                 .collect(Collectors.toList());
@@ -44,16 +50,30 @@ public class AdoptionCustomerService {
 
 
 
-    public AdoptionCustomer newAdoptonCustomer( AdoptionCustomer newAdoptionCustomer,  Integer adoptionId, @PathVariable Integer customerId) {
-        Adoption adoption=adoptionRepository.findById(adoptionId).get();
-        Customer customer=customerRepository.findById(customerId).get();
-        newAdoptionCustomer.setCustomerAdoptionCustomer(customer);
-        newAdoptionCustomer.setAdoptionAdoptionCustomer(adoption);
-        newAdoptionCustomer=adoptionCustomerRepository.save(newAdoptionCustomer);
+    public AdoptionCustomer newAdoptonCustomer( AdoptionCustomerDTOWithId newAdoptionCustomer) {
+        Adoption adoption=adoptionRepository.findById(newAdoptionCustomer.getIdAdoptionAdoptionCustomer()).get();
+        Customer customer=customerRepository.findById(newAdoptionCustomer.getIdCustomerAdoptionCustomer()).get();
 
-        adoption.getAdoptionCustomers().add(newAdoptionCustomer);
-        customer.getAdoptionCustomers().add(newAdoptionCustomer);
-        return newAdoptionCustomer;
+        ModelMapper modelMapper = new ModelMapper();
+        TypeMap<AdoptionCustomerDTOWithId, AdoptionCustomer> typeMap = modelMapper.createTypeMap(AdoptionCustomerDTOWithId.class, AdoptionCustomer.class);
+//        typeMap.addMappings(mapping -> {
+//            mapping.map(AdoptionCustomerDTOWithId::getAdoptionContract, AdoptionCustomer::setAdoptionContract);
+//            mapping.map(AdoptionCustomerDTOWithId::getCustomerFeedback, AdoptionCustomer::setCustomerFeedback);
+//        });
+        AdoptionCustomer adoptionCustomer = modelMapper.map(newAdoptionCustomer, AdoptionCustomer.class);
+        adoptionCustomer.setAdoptionAdoptionCustomer(adoption);
+        adoptionCustomer.setCustomerAdoptionCustomer(customer);
+
+        return adoptionCustomerRepository.save(adoptionCustomer);
+
+        //this was before i addded the frontend part where i add using a dto, not the whole object
+//        newAdoptionCustomer.setCustomerAdoptionCustomer(customer);
+//        newAdoptionCustomer.setAdoptionAdoptionCustomer(adoption);
+//        newAdoptionCustomer=adoptionCustomerRepository.save(newAdoptionCustomer);
+//
+//        adoption.getAdoptionCustomers().add(newAdoptionCustomer);
+//        customer.getAdoptionCustomers().add(newAdoptionCustomer);
+//        return newAdoptionCustomer;
     }
 
 

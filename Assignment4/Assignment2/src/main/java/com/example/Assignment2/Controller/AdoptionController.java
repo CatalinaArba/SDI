@@ -10,6 +10,7 @@ import com.example.Assignment2.Service.AdoptionService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -31,15 +32,25 @@ public class AdoptionController {
         this.adoptionService = adoptionService;
     }
 
-    @GetMapping("/adoptions")
-    List<AdoptionDTO> all() {
-        return adoptionService.all();
+    @GetMapping("/adoptions/page/{page}/size/{size}")
+    List<AdoptionDTO> all(@PathVariable int page, @PathVariable int size) {
+        PageRequest pr=PageRequest.of(page,size);
+        return adoptionService.all(pr);
     }
 
+    @GetMapping("/adoptions/count")
+    Long countAll() {
+        return adoptionService.countAll();
+    }
 
     @PostMapping("/adoptions/{petId}")
     Adoption newAdoption(@Valid @RequestBody Adoption newAdoption, @PathVariable Integer petId) {
-        return adoptionService.newAdoption(newAdoption,petId);
+        return adoptionService.newAdoptionWithPetId(newAdoption,petId);
+    }
+
+    @PostMapping("/adoptions")
+    Adoption newAdoption(@Valid @RequestBody Adoption newAdoption) {
+        return adoptionService.newAdoption(newAdoption);
     }
 
     /*@PostMapping("/adoptions/{adoptionId}/pets")
@@ -76,8 +87,7 @@ public class AdoptionController {
 
 
     @GetMapping("/adoptions/{id}")
-    AdoptionDTOWithCustomerIds one(@PathVariable Integer id) {
-
+    AdoptionDTOWithCustomerIds one(@PathVariable String id) {
         return adoptionService.one(id);
     }
 
@@ -108,5 +118,11 @@ public class AdoptionController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @GetMapping("/adoptions/autocomplete")
+    public List<Adoption> getAdoptionsSuggestions(@RequestParam String query)
+    {
+        return this.adoptionService.getAdoptionIdsAutocomplete(query);
     }
 }

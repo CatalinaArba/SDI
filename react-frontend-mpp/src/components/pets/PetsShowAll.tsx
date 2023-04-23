@@ -39,13 +39,13 @@ export const PetsShowAll = () => {
 		setLoading(true);
   
 		const fetchRecLbl = () => {
-		  //fetch(GlobalURL+`/pets/count`)
-		  fetch(`${BACKEND_API_URL}/pets/count`)
+		  fetch(GlobalURL+`/pets/count`)
+		  //fetch(`${BACKEND_API_URL}/pets/count`)
 		  //fetch(`http://16.16.143.73:80/pets/count`)
 		  .then((response) => response.json())
 		  .then((count) => {
-			//fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
-			fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
+			fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
+			//fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
 			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
 			.then((response) => response.json())
 			.then((data) => {
@@ -119,9 +119,12 @@ export const PetsShowAll = () => {
 			)}
 			{!loading && totalPets === 0 && <p>No pets found</p>}
 			{!loading && (<div>
-				<Button sx={{ color: "pink" }} onClick={sortPets} >
-					Sort pets after names
-				</Button>
+				<div style={{ display: "flex", justifyContent: "flex-start" }}>
+    			<Button sx={{ color: "black" }} onClick={sortPets}>
+     			   Sort pets after names
+  				  </Button>
+				</div>
+				<div style={{ display: "flex", justifyContent: "flex-end" }}></div>
 				<Button
 				sx={{color:"black"}}
 				disabled={currentPage===0}
@@ -132,7 +135,7 @@ export const PetsShowAll = () => {
 			   sx={{color:"black"}} onClick={handleNextPage}>
 				Next Page
 			   </Button>
-
+		
 			   <Box mx={2} display="flex" alignItems="center">
 				Page {currentPage+1} of {Math.ceil(totalPets/pageSize)}
 			   </Box>
