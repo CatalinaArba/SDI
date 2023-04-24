@@ -53,7 +53,7 @@ public class AdoptionCustomerController {
     }
 
     @PutMapping("/adoptionCustomer/{id}")
-    AdoptionCustomer updateAdoptionCustomer(@RequestBody AdoptionCustomer newAdoptionCustomer, @PathVariable Integer id) {
+    AdoptionCustomer updateAdoptionCustomer(@RequestBody AdoptionCustomerDTOWithId newAdoptionCustomer, @PathVariable Integer id) {
 
         return adoptionCustomerService.updateAdoptionCustomer(newAdoptionCustomer,id);
     }

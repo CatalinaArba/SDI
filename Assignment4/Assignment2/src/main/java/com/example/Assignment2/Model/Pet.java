@@ -26,13 +26,7 @@ public class Pet {
     @JsonIgnore
     Adoption adoption;
 
-    public String getDescription() {
-        return description;
-    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public Pet(String name, String petType, Integer age, String gender, Integer price, String description) {
         this.name = name;
@@ -44,6 +38,14 @@ public class Pet {
     }
 
     public Pet() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Adoption getAdoption() {

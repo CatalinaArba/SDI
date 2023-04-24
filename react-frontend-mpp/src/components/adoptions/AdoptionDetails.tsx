@@ -16,7 +16,7 @@ import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 export const AdoptionDetails = () => {
     const [loading, setLoading] = useState(false);
 	const { id} = useParams<{ id: string }>();
-	const [adoption, setAdoption] = useState<AdoptionDTOWithCustomerIds>();
+	const [adoption, setAdoption] = useState<Adoption>();
 	useEffect(() => {
         setLoading(true)
         const fetchAdoption = async () => {
@@ -45,26 +45,26 @@ export const AdoptionDetails = () => {
 						<ArrowBackIcon />
 					</IconButton>{" "}
 					<h1>Adoption Details</h1>
-                    <p>Adoption Id: {adoption?.adoption.id}</p>
-					<p>Adoption Date: {adoption?.adoption.adoptionDate}</p>
-					<p>Fee: {adoption?.adoption.adoptionFee}</p>
-					<p>Status : {adoption?.adoption.adoptionStatus}</p>
-                    <p>Location: {adoption?.adoption.adoptionLocation}</p>
-                    <p>Notes: {adoption?.adoption.adoptionNotes}</p>
+                    <p>Adoption Id: {adoption?.id}</p>
+					<p>Adoption Date: {adoption?.adoptionDate}</p>
+					<p>Fee: {adoption?.adoptionFee}</p>
+					<p>Status : {adoption?.adoptionStatus}</p>
+                    <p>Location: {adoption?.adoptionLocation}</p>
+                    <p>Notes: {adoption?.adoptionNotes}</p>
                     {/* <p>Customers: {String(adoption?.customerIds.join(', '))}</p> */}
 				</CardContent>
 				<CardActions>
-					<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/${id}/edit`}>
+					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptions/${id}/edit`}>
 						<EditIcon />
 					</IconButton>
 
-					<IconButton component={Link} sx={{ mr: 3 }} to={`/pets/${id}/delete`}>
+					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptions/${id}/delete`}>
 						<DeleteForeverIcon sx={{ color: "red" }} />
 					</IconButton>
 				</CardActions>
 			<p>The adopted pets</p>
-            {!loading &&!adoption?.adoption.pet&& <p> No pets </p>}
-            {!loading&& adoption?.adoption.pet &&(
+            {!loading &&!adoption?.pet&& <p> No pets </p>}
+            {!loading&& adoption?.pet &&(
                 
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -82,7 +82,7 @@ export const AdoptionDetails = () => {
 						</TableHead>
 						<TableBody>
                             
-							{adoption?.adoption.pet.map((pet: Pet, index) => (
+							{adoption?.pet.map((pet: Pet, index) => (
 								<TableRow key={index}>
 									<TableCell component="th" scope="row">
 										{ index + 1}
@@ -128,9 +128,9 @@ export const AdoptionDetails = () => {
             <br />
             </div>
             <p>Adoption-customer details</p>
-            {!loading && !adoption?.adoption.adoptionCustomers && <p>No adoption customer</p>}
+            {!loading && !adoption?.adoptionCustomers && <p>No adoption customer</p>}
 				
-			{!loading && adoption?.adoption.adoptionCustomers  && (
+			{!loading && adoption?.adoptionCustomers  && (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
 						<TableHead>
@@ -142,7 +142,7 @@ export const AdoptionDetails = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{adoption.adoption.adoptionCustomers.map((adoptionCustomer: AdoptionCustomer, index) => (
+							{adoption.adoptionCustomers.map((adoptionCustomer: AdoptionCustomer, index) => (
 								<TableRow key={index}>
 									<TableCell component="th" scope="row">
 										{ index + 1}

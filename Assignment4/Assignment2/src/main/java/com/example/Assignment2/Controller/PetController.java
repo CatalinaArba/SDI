@@ -59,9 +59,8 @@ public class PetController {
         return petService.one(id);
     }
 
-    @PutMapping("/pets/{id}/edit")
-    Pet replacePet(@RequestBody Pet newPet, @PathVariable Integer id) {
-
+    @PutMapping("/pets/{id}")
+    Pet replacePet(@RequestBody PetDTOWithId newPet, @PathVariable Integer id) {
         return petService.replacePet(newPet,id);
     }
 

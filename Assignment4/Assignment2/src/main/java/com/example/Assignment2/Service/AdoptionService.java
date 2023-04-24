@@ -96,26 +96,27 @@ public class AdoptionService {
     }*/
 
 
-    public AdoptionDTOWithCustomerIds one( String idString) {
+    public Adoption one( String idString) {
         Integer id=Integer.parseInt(idString);
         if (adoptionRepository.findById(id).isEmpty())
             throw new PetNotFoundException(id);
 
         Adoption adoption=adoptionRepository.findById(id).get();
-        AdoptionDTOWithCustomerIds adoptionDTOWithCustomerIds=new AdoptionDTOWithCustomerIds();
-
-        List<Integer> customersIds=new ArrayList<>();
-
-        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAdoptionCustomerByAdoptionAdoptionCustomerId(adoption.getId());
-        for(AdoptionCustomer ac:adoptionCustomers) {
-            if (ac.getAdoptionAdoptionCustomer().getId() == adoption.getId()) {
-                customersIds.add(ac.getCustomerAdoptionCustomer().getId());
-            }
-        }
-
-        adoptionDTOWithCustomerIds.setCustomersIds(customersIds);
-        adoptionDTOWithCustomerIds.setAdoption(adoption);
-        return  adoptionDTOWithCustomerIds;
+//        AdoptionDTOWithCustomerIds adoptionDTOWithCustomerIds=new AdoptionDTOWithCustomerIds();
+//
+//        List<Integer> customersIds=new ArrayList<>();
+//
+//        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAdoptionCustomerByAdoptionAdoptionCustomerId(adoption.getId());
+//        for(AdoptionCustomer ac:adoptionCustomers) {
+//            if (ac.getAdoptionAdoptionCustomer().getId() == adoption.getId()) {
+//                customersIds.add(ac.getCustomerAdoptionCustomer().getId());
+//            }
+//        }
+//
+//        adoptionDTOWithCustomerIds.setCustomersIds(customersIds);
+//        adoptionDTOWithCustomerIds.setAdoption(adoption);
+//        return  adoptionDTOWithCustomerIds;
+        return adoption;
     }
 
     public Adoption replaceAdoption( Adoption newAdoption,  Integer id) {
@@ -145,7 +146,7 @@ public class AdoptionService {
 
     //all the adoptions ordered by the average pet's price
 
-    public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice() {
+    public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice(Integer page, Integer size) {
         List<Adoption> adoptions = adoptionRepository.findAll();
         List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
@@ -163,7 +164,13 @@ public class AdoptionService {
             adoptionDTOStatisticsPetsPrices.add(adoptionDTOStatisticsPetsPrice);
         }
         adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
-        return adoptionDTOStatisticsPetsPrices;
+        Long totalElements = adoptionRepository.count();
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+        int startIndex = (page - 1) * size;
+        int endIndex = (int) Math.min(startIndex + size, totalElements);
+        List<AdoptionDTOStatisticsPetsPrice> pageAdoptions = adoptionDTOStatisticsPetsPrices.subList(startIndex, endIndex);
+
+        return pageAdoptions;
     }
 
     public List<Adoption> getAdoptionIdsAutocomplete( String query)

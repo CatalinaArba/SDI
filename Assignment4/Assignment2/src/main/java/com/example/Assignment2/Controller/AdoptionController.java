@@ -85,9 +85,8 @@ public class AdoptionController {
         }
     }*/
 
-
     @GetMapping("/adoptions/{id}")
-    AdoptionDTOWithCustomerIds one(@PathVariable String id) {
+    Adoption one(@PathVariable String id) {
         return adoptionService.one(id);
     }
 
@@ -98,15 +97,15 @@ public class AdoptionController {
     }
 
     @DeleteMapping("/adoptions/{id}")
-    void deleteAdoption(@PathVariable Integer id) {
-
-        adoptionService.deleteAdoption(id);
+    void deleteAdoption(@PathVariable String id) {
+        Integer intID=Integer.parseInt(id);
+        adoptionService.deleteAdoption(intID);
     }
 
     //all the adoptions ordered by the average pet's price
-    @GetMapping("/adoptions/statistics")
-    public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice() {
-        return adoptionService.getAllAdoptionsOrderByAvgPetPrice();
+    @GetMapping("/adoptions/avgPetPrice/page/{page}/size/{size}")
+    public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice(@PathVariable int page, @PathVariable int size) {
+        return adoptionService.getAllAdoptionsOrderByAvgPetPrice(page,size);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)

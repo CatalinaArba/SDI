@@ -109,20 +109,22 @@ public class AdoptionCustomerService {
         return  modelMapper.map(adoptionCustomer, AdoptionCustomerDTO.class);
     }
 
-    public AdoptionCustomer updateAdoptionCustomer( AdoptionCustomer newAdoptionCustomer,  Integer id) {
+    public AdoptionCustomer updateAdoptionCustomer( AdoptionCustomerDTOWithId newAdoptionCustomer,  Integer id) {
 
         AdoptionCustomer oldAdoptionCustomer=adoptionCustomerRepository.findById(id).get();
+        Adoption adoption=adoptionRepository.findById(newAdoptionCustomer.getIdAdoptionAdoptionCustomer()).get();
+        Customer customer=customerRepository.findById(newAdoptionCustomer.getIdCustomerAdoptionCustomer()).get();
         return adoptionCustomerRepository.findById(id)
                 .map(adoptionCustomer -> {
                     adoptionCustomer.setCustomerFeedback(newAdoptionCustomer.getCustomerFeedback());
                     adoptionCustomer.setAdoptionContract(newAdoptionCustomer.getAdoptionContract());
-                    adoptionCustomer.setCustomerAdoptionCustomer(oldAdoptionCustomer.getCustomerAdoptionCustomer());
-                    adoptionCustomer.setAdoptionAdoptionCustomer(oldAdoptionCustomer.getAdoptionAdoptionCustomer());
+                    adoptionCustomer.setCustomerAdoptionCustomer(customer);
+                    adoptionCustomer.setAdoptionAdoptionCustomer(adoption);
                     return adoptionCustomerRepository.save(adoptionCustomer);
                 })
                 .orElseGet(() -> {
-                    newAdoptionCustomer.setId(id);
-                    return adoptionCustomerRepository.save(newAdoptionCustomer);
+                    //newAdoptionCustomer.setId(id);
+                    return adoptionCustomerRepository.save(oldAdoptionCustomer);
                 });
     }
 

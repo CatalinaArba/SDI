@@ -43,15 +43,15 @@ export const AdoptionCustomerDetails = () => {
 					<p>Contract: {adoptionCustomer?.adoptionContract}</p>
 					<p>Customer Feedback: {adoptionCustomer?.customerFeedback}</p>
                     {adoptionCustomer?.adoptionAdoptionCustomer &&adoptionCustomer.customerAdoptionCustomer &&(
-					<><p>Adoption Date : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionDate}</p><p>Adoption Fee : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionFee}</p><p>Adoption Status : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionStatus}</p><p>Adoption Location : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionLocation}</p><p>Adoption Notes:{adoptionCustomer?.adoptionAdoptionCustomer.adoptionNotes}</p><p>Customer First Name:{adoptionCustomer?.customerAdoptionCustomer.firstName}</p><p>Customer Last Name:{adoptionCustomer?.customerAdoptionCustomer.lastName}</p><p>Customer Address:{adoptionCustomer?.customerAdoptionCustomer.address}</p><p>Customer Mail:{adoptionCustomer?.customerAdoptionCustomer.mail}</p><p>Customer Phone:{adoptionCustomer?.customerAdoptionCustomer.phone}</p></>)}
+					<><p>Adoption ID : {adoptionCustomer?.adoptionAdoptionCustomer.id}</p><p>Adoption Date : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionDate}</p><p>Adoption Fee : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionFee}</p><p>Adoption Status : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionStatus}</p><p>Adoption Location : {adoptionCustomer?.adoptionAdoptionCustomer.adoptionLocation}</p><p>Adoption Notes:{adoptionCustomer?.adoptionAdoptionCustomer.adoptionNotes}</p><p>Customer First Name:{adoptionCustomer?.customerAdoptionCustomer.firstName}</p><p>Customer Last Name:{adoptionCustomer?.customerAdoptionCustomer.lastName}</p><p>Customer Address:{adoptionCustomer?.customerAdoptionCustomer.address}</p><p>Customer Mail:{adoptionCustomer?.customerAdoptionCustomer.mail}</p><p>Customer Phone:{adoptionCustomer?.customerAdoptionCustomer.phone}</p></>)}
 				</CardContent>
 				<CardActions>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptionCustomer/${id}`}>
+					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptionCustomer/${id}/edit`}>
 						<EditIcon />
 					</IconButton>
 
-					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptionCustomer/${id}`}>
+					<IconButton component={Link} sx={{ mr: 3 }} to={`/adoptionCustomer/${id}/delete`}>
 						<DeleteForeverIcon sx={{ color: "red" }} />
 					</IconButton>
                     </div>

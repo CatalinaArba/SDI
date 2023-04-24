@@ -77,8 +77,8 @@ public class PetService {
 
     }
 
-    public Pet replacePet(Pet newPet,Integer id) {
-
+    public Pet replacePet(PetDTOWithId newPet,Integer id) {
+        Adoption adoption=adoptionRepository.findById(newPet.getAdoptionId()).get();
         return petRepository.findById(id)
                 .map(pet -> {
                     pet.setAge(newPet.getAge());
@@ -86,11 +86,13 @@ public class PetService {
                     pet.setGender(newPet.getGender());
                     pet.setName(newPet.getName());
                     pet.setPrice(newPet.getPrice());
+                    pet.setDescription(newPet.getDescription());
+                    pet.setAdoption(adoption);
                     return petRepository.save(pet);
                 })
                 .orElseGet(() -> {
-                    newPet.setId(id);
-                    return petRepository.save(newPet);
+                    Pet pet=petRepository.findById(id).get();
+                    return petRepository.save(pet);
                 });
     }
 
