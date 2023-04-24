@@ -39,13 +39,13 @@ export const PetsShowAll = () => {
 		setLoading(true);
   
 		const fetchRecLbl = () => {
-		  fetch(GlobalURL+`/pets/count`)
-		  //fetch(`${BACKEND_API_URL}/pets/count`)
+		  //fetch(GlobalURL+`/pets/count`)
+		  fetch(`${BACKEND_API_URL}/pets/count`)
 		  //fetch(`http://16.16.143.73:80/pets/count`)
 		  .then((response) => response.json())
 		  .then((count) => {
-			fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
-			//fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
+			//fetch(GlobalURL+`/pets/page/${currentPage}/size/${pageSize}`)
+			fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
 			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
 			.then((response) => response.json())
 			.then((data) => {
