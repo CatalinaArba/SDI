@@ -20,6 +20,7 @@ import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 import { debounce } from "lodash";
 import { Adoption } from "../../models/Adoption";
 import { Customer } from "../../models/Customer";
+import { BACKEND_API_URL } from "../../components";
 
 export const AdoptionCustomerUpdate = () => {
   const { id } = useParams();
@@ -35,7 +36,9 @@ export const AdoptionCustomerUpdate = () => {
 
   useEffect(() => {
     const fetchPet = async () => {
-      const response = await fetch(GlobalURL + `/adoptionCustomer/${id}`);
+      //const response = await fetch(GlobalURL + `/adoptionCustomer/${id}`);
+      const response = await fetch( `${BACKEND_API_URL}/adoptionCustomer/${id}`);
+
       const fetchedPet = await response.json();
       setAdoptionsCustomer(fetchedPet);
       setLoading(false);
@@ -47,7 +50,8 @@ export const AdoptionCustomerUpdate = () => {
   const updateAdoptionCustomer = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     try {
-      await axios.put(GlobalURL + `/adoptionCustomer/${id}`, adoptionCustomer);
+      //await axios.put(GlobalURL + `/adoptionCustomer/${id}`, adoptionCustomer);
+      await axios.put(`${BACKEND_API_URL}/adoptionCustomer/${id}`, adoptionCustomer);
       navigate("/adoptionCustomer");
     } catch (error) {
       console.log(error);

@@ -41,13 +41,13 @@ export const AdoptionCustomerShowAll = () => {
 		setLoading(true);
   
 		const fetchRecLbl = () => {
-		  fetch(GlobalURL+`/adoptionCustomer/count`)
-		  //fetch(`${BACKEND_API_URL}/pets/count`)
+		  //fetch(GlobalURL+`/adoptionCustomer/count`)
+		  fetch(`${BACKEND_API_URL}/adoptionCustomer/count`)
 		  //fetch(`http://16.16.143.73:80/pets/count`)
 		  .then((response) => response.json())
 		  .then((count) => {
-			fetch(GlobalURL+`/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
-			//fetch(`${BACKEND_API_URL}/pets/page/${currentPage}/size/${pageSize}`)
+			//fetch(GlobalURL+`/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
+			fetch(`${BACKEND_API_URL}/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
 			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
 			.then((response) => response.json())
 			.then((data) => {

@@ -20,6 +20,7 @@ import { Adoption } from "../../models/Adoption";
 import { debounce } from "lodash";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 import { Customer } from "../../models/Customer";
+import { BACKEND_API_URL } from "../../components";
 
 export const AdoptionCustomerAdd = () => {
   const navigate = useNavigate();
@@ -63,7 +64,8 @@ export const AdoptionCustomerAdd = () => {
   };
   const fetchAdoptionSuggestions = async (query: string) => {
     try {
-      let url = GlobalURL + `/adoptions/autocomplete?query=${query}`;
+      //let url = GlobalURL + `/adoptions/autocomplete?query=${query}`;
+      let url =  `${BACKEND_API_URL}/adoptions/autocomplete?query=${query}`;
 
       const response = await fetch(url);
 

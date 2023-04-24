@@ -16,8 +16,8 @@ export const AdoptionCustomerDetails = () => {
 	useEffect(() => {
         const fetchAdoptionCustomer = async () => {
           try {
-			const response = await fetch(GlobalURL+`/adoptionCustomer/${id}`);
-            //const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+			//const response = await fetch(GlobalURL+`/adoptionCustomer/${id}`);
+            const response = await fetch(`${BACKEND_API_URL}/adoptionCustomer/${id}`);
             const data = await response.json();
             setAdoptionsCustomer(data);
             
