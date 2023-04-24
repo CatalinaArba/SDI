@@ -16,6 +16,7 @@ import axios from "axios";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 import { Adoption } from "../../models/Adoption";
+import { BACKEND_API_URL } from "../../components";
 
 export const AdoptionAdd = () => {
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ export const AdoptionAdd = () => {
     event.preventDefault();
     try {
       //await axios.post(`/api/pets/add`, pet);
-      await axios.post(GlobalURL + `/adoptions`, adoption);
+      //await axios.post(GlobalURL + `/adoptions`, adoption);
+      await axios.post( `${BACKEND_API_URL}/adoptions`, adoption);
       navigate("/adoptions");
     } catch (error) {
       console.log(error);

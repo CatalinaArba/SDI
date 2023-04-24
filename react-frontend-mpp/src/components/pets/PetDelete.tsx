@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { GlobalURL } from "../../main";
+import { BACKEND_API_URL } from "../../components";
 
 export const PetDelete = () => {
 	const { id } = useParams();
@@ -12,7 +13,8 @@ export const PetDelete = () => {
 		event.preventDefault();
 		//await axios.delete(`/api/pets/${id}/delete`);
 		// go to courses list
-		await axios.delete(GlobalURL+`/pets/${id}/delete`);
+		//await axios.delete(GlobalURL+`/pets/${id}/delete`);
+		await axios.delete(`${BACKEND_API_URL}/pets/${id}/delete`);
 		navigate("/pets");
 	};
 

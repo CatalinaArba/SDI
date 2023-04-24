@@ -15,8 +15,8 @@ export const PetDetails = () => {
 	useEffect(() => {
         const fetchPet = async () => {
           try {
-			const response = await fetch(GlobalURL+`/pets/${id}/details`);
-            //const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+			//const response = await fetch(GlobalURL+`/pets/${id}/details`);
+            const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
             const data = await response.json();
             setPet(data);
             console.log(`Pet name: ${data.name}`);

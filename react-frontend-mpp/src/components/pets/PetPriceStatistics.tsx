@@ -19,6 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { GlobalURL } from "../../main";
+import { BACKEND_API_URL } from "../../components";
 
 
 export const PetPriceStatistics = () => {
@@ -28,8 +29,9 @@ export const PetPriceStatistics = () => {
 
     useEffect(() => {
         setLoading(true);
-		fetch(GlobalURL+`/pets/price`)
-        //fetch(`/api/pets/price`)
+		//fetch(GlobalURL+`/pets/price`)
+		//fetch(GlobalURL+`/pets/price`)
+        fetch(`${BACKEND_API_URL}/pets/price`)
             .then((res) => res.json())
             .then((data) => {
                 setPets(data),

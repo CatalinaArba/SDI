@@ -18,6 +18,7 @@ import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 import { debounce } from "lodash";
 import { Adoption } from "../../models/Adoption";
+import { BACKEND_API_URL } from "../../components";
 
 export const PetUpdate = () => {
   const { id } = useParams();
@@ -36,7 +37,8 @@ export const PetUpdate = () => {
 
   useEffect(() => {
     const fetchPet = async () => {
-      const response = await fetch(GlobalURL + `/pets/${id}/details`);
+	  const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+      //const response = await fetch(GlobalURL + `/pets/${id}/details`);
       const fetchedPet = await response.json();
       setPet(fetchedPet);
       setLoading(false);

@@ -18,6 +18,7 @@ import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 import { Adoption } from "../../models/Adoption";
 import { debounce } from "lodash";
+import { BACKEND_API_URL } from "../../components";
 
 export const PetAdd = () => {
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ export const PetAdd = () => {
     event.preventDefault();
     try {
       //await axios.post(`/api/pets/add`, pet);
-      await axios.post(GlobalURL + `/pets/add`, pet);
+      //await axios.post(GlobalURL + `/pets/add`, pet);
+	  await axios.post(`${BACKEND_API_URL}/pets/add`, pet);
       navigate("/pets");
     } catch (error) {
       console.log(error);
@@ -48,8 +50,8 @@ export const PetAdd = () => {
 
   const fetchSuggestions = async (query: string) => {
     try {
-      let url = GlobalURL + `/adoptions/autocomplete?query=${query}`;
-
+      //let url = GlobalURL + `/adoptions/autocomplete?query=${query}`;
+	  let url =`${BACKEND_API_URL}/adoptions/autocomplete?query=${query}`;
       const response = await fetch(url);
 
       const data = await response.json();

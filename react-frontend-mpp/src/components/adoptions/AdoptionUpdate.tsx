@@ -20,6 +20,7 @@ import { debounce } from "lodash";
 import { Adoption } from "../../models/Adoption";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 import { AdoptionDTOWithCustomerIds } from "../../models/AdoptionDTOWithCustomerIds";
+import { BACKEND_API_URL } from "../../components";
 
 export const AdoptionUpdate = () => {
   const { id } = useParams();
@@ -42,8 +43,8 @@ export const AdoptionUpdate = () => {
     setLoading(true)
     const fetchAdoption = async () => {
       try {
-        const response = await fetch(GlobalURL+`/adoptions/${id}`);
-        //const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+        //const response = await fetch(GlobalURL+`/adoptions/${id}`);
+        const response = await fetch(`${BACKEND_API_URL}/adoptions/${id}`);
         const data = await response.json();
         setAdoption(data);
         setLoading(false)

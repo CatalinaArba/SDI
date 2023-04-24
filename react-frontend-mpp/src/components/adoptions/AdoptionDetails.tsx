@@ -21,8 +21,8 @@ export const AdoptionDetails = () => {
         setLoading(true)
         const fetchAdoption = async () => {
           try {
-			const response = await fetch(GlobalURL+`/adoptions/${id}`);
-            //const response = await fetch(`${BACKEND_API_URL}/pets/${id}/details`);
+			//const response = await fetch(GlobalURL+`/adoptions/${id}`);
+            const response = await fetch(`${BACKEND_API_URL}/adoptions/${id}`);
             const data = await response.json();
             setAdoption(data);
             setLoading(false)
