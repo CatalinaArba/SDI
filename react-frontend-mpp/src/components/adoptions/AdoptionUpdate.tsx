@@ -20,7 +20,7 @@ import { debounce } from "lodash";
 import { Adoption } from "../../models/Adoption";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 import { AdoptionDTOWithCustomerIds } from "../../models/AdoptionDTOWithCustomerIds";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 
 export const AdoptionUpdate = () => {
   const { id } = useParams();

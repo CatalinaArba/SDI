@@ -18,7 +18,7 @@ import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 import { Adoption } from "../../models/Adoption";
 import { debounce } from "lodash";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 
 export const PetAdd = () => {
   const navigate = useNavigate();

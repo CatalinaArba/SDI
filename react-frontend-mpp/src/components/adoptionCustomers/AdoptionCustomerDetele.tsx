@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { GlobalURL } from "../../main";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 
 export const AdoptionCustomerDelete = () => {
 	const { id } = useParams();

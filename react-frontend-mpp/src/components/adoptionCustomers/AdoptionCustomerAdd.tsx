@@ -20,7 +20,7 @@ import { Adoption } from "../../models/Adoption";
 import { debounce } from "lodash";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 import { Customer } from "../../models/Customer";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 
 export const AdoptionCustomerAdd = () => {
   const navigate = useNavigate();

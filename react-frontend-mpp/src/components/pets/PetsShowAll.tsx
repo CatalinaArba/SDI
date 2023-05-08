@@ -25,7 +25,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Pet } from "../../models/Pets";
 import { Row, Col, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { GlobalURL } from "../../main";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 import axios from "axios";
 
 export const PetsShowAll = () => {

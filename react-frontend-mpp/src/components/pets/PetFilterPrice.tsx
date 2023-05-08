@@ -22,7 +22,7 @@ import { Link, useParams } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { GlobalURL } from "../../main";
 import axios from "axios";
-import { BACKEND_API_URL } from "../../components"
+import { BACKEND_API_URL } from "../../constants";
 import { Pet } from "../../models/Pets"
 
 export const PetFilterPrice = () => {

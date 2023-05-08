@@ -16,7 +16,7 @@ import axios from "axios";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
 import { Adoption } from "../../models/Adoption";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 
 export const AdoptionAdd = () => {
   const navigate = useNavigate();

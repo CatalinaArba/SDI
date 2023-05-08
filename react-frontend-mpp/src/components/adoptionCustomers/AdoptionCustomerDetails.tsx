@@ -7,7 +7,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Pet } from "../../models/Pets";
 import { GlobalURL } from "../../main";
-import { BACKEND_API_URL } from "../../components";
+import { BACKEND_API_URL } from "../../constants";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
 
 export const AdoptionCustomerDetails = () => {
