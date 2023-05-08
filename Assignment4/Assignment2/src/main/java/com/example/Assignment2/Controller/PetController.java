@@ -69,9 +69,10 @@ public class PetController {
         petService.deletePet(id);
     }
 
-    @GetMapping("/pets/price/{minPrice}")
-    public List<Pet> byPrice(@PathVariable Integer minPrice) {
-        return petService.byPrice(minPrice);
+    @GetMapping("/pets/price/{minPrice}/page/{page}/size/{size}")
+    public List<Pet> byPrice(@PathVariable Integer minPrice,@PathVariable int page, @PathVariable int size) {
+        PageRequest pr=PageRequest.of(page,size);
+        return petService.byPrice(minPrice,pr);
     }
 
     @GetMapping("/pets/price")

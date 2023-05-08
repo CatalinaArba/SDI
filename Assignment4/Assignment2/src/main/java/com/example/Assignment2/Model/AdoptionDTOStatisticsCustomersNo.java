@@ -1,46 +1,32 @@
 package com.example.Assignment2.Model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-
 import java.time.LocalDate;
 
-public class AdoptionDTOStatisticsPetsPrice {
+public class AdoptionDTOStatisticsCustomersNo {
     private Integer id;
     private LocalDate adoptionDate;
     private Integer adoptionFee;
     private String adoptionStatus;
     private String adoptionLocation;
     private String adoptionNotes;
-    private double avgPetPrice;
+    private Integer customerNumbers;
 
-    private Integer sum;
-
-    private Integer count;
-
-    public AdoptionDTOStatisticsPetsPrice() {
+    public AdoptionDTOStatisticsCustomersNo() {
     }
 
-    public void increaseSum(Integer sum) {
-        this.sum += sum;
-    }
-
-    public void increaseCount() {
-        this.count=this.count+1;
-    }
-
-    public AdoptionDTOStatisticsPetsPrice(Integer id, LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes, Integer sum, Integer count) {
+    public AdoptionDTOStatisticsCustomersNo(Integer id, LocalDate adoptionDate, Integer adoptionFee, String adoptionStatus, String adoptionLocation, String adoptionNotes, Integer customerNumbers) {
         this.id = id;
         this.adoptionDate = adoptionDate;
         this.adoptionFee = adoptionFee;
         this.adoptionStatus = adoptionStatus;
         this.adoptionLocation = adoptionLocation;
         this.adoptionNotes = adoptionNotes;
-        this.sum = sum;
-        this.count = count;
-
+        this.customerNumbers = customerNumbers;
     }
 
+    public void increaseNo(){
+        this.customerNumbers+=1;
+    }
     public Integer getId() {
         return id;
     }
@@ -89,27 +75,11 @@ public class AdoptionDTOStatisticsPetsPrice {
         this.adoptionNotes = adoptionNotes;
     }
 
-    public double getAvgPetPrice() {
-        return avgPetPrice;
+    public Integer getCustomerNumbers() {
+        return customerNumbers;
     }
 
-    public void computeAvgPetPrice(){
-        if (count==0)
-            avgPetPrice=0;
-        else
-            avgPetPrice= Math.round((sum/count) * 100.0) / 100.0;
-    }
-
-    public void setAvgPetPrice(double avgPetPrice) {
-        this.avgPetPrice = avgPetPrice;
-    }
-
-    public void setSum(Integer sum) {
-        this.sum = sum;
-    }
-
-
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setCustomerNumbers(Integer customerNumbers) {
+        this.customerNumbers = customerNumbers;
     }
 }

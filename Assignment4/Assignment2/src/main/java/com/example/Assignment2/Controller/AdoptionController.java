@@ -107,6 +107,11 @@ public class AdoptionController {
     public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice(@PathVariable int page, @PathVariable int size) {
         return adoptionService.getAllAdoptionsOrderByAvgPetPrice(page,size);
     }
+
+    @GetMapping("/adoptions/customers/page/{page}/size/{size}")
+    public List<AdoptionDTOStatisticsCustomersNo> getAllAdoptionsAndCustomers(@PathVariable int page, @PathVariable int size) {
+        return adoptionService.getAllAdoptionsAnnTheCustomersNo(page,size);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex)
     {

@@ -51,6 +51,8 @@ export const AdoptionDetails = () => {
 					<p>Status : {adoption?.adoptionStatus}</p>
                     <p>Location: {adoption?.adoptionLocation}</p>
                     <p>Notes: {adoption?.adoptionNotes}</p>
+					<p>Pets number: {adoption?.pet.length}</p>
+					<p>Adoption-Customers number: {adoption?.adoptionCustomers.length}</p>
                     {/* <p>Customers: {String(adoption?.customerIds.join(', '))}</p> */}
 				</CardContent>
 				<CardActions>
@@ -77,6 +79,7 @@ export const AdoptionDetails = () => {
 								<TableCell align="center">Gender</TableCell>
 								<TableCell align="center">Price</TableCell>
 								<TableCell align="center">Description</TableCell>
+								
 								<TableCell align="center">Options</TableCell>
 							</TableRow>
 						</TableHead>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
 	TableContainer,
 	Paper,
@@ -28,46 +28,121 @@ import { GlobalURL } from "../../main";
 import { BACKEND_API_URL } from "../../components";
 import { Adoption } from "../../models/Adoption";
 import { AdoptionCustomer } from "../../models/AdoptionCustomer";
+import axios from "axios";
 
 export const AdoptionCustomerShowAll = () => {
+
 	const [loading, setLoading] = useState(false);
-	const [adoptionsCustomer, setAdoptionsCustomer] = useState([]);
-	const [currentPage, setCurrentPage]=useState(0)
-    const [pageSize, setPageSize] = useState(10);
-    const [totalAdoptionsCustomer, setTotalAdoptionsCustomer] =useState(0)
-	const [start_index,setStartIndex]=useState(0)
-;
-	useEffect(() => {
+  	const [adoptionCustomer, setAdoptionsCustomer] = useState<AdoptionCustomer[]>([]);
+  	const [page, setPage] = useState(0);
+  	const [pageSize, setPageSize] = useState(100); //Items per Page
+
+	  const fetchAdoptionCustomer = useCallback(async (page: number, pageSize: number) => {
+		try {
+		  const dataResponse = await axios.get(
+			`${BACKEND_API_URL}/adoptionCustomer/page/${page}/size/${pageSize}`
+			//GlobalURL+`/adoptionCustomer/page/${page}/size/${pageSize}`
+		  );
+		  const data = dataResponse.data;
+	
+		  setAdoptionsCustomer(data);
+		  setLoading(false);
+		} catch (error) {
+		  console.error(error);
+		  setLoading(false);
+		}
+	  }, []);
+	
+	  useEffect(() => {
+		console.log(
+		  "useEffect triggered with page:",
+		  page,
+		  "and pageSize:",
+		  pageSize
+		);
 		setLoading(true);
-  
-		const fetchRecLbl = () => {
-		  //fetch(GlobalURL+`/adoptionCustomer/count`)
-		  fetch(`${BACKEND_API_URL}/adoptionCustomer/count`)
-		  //fetch(`http://16.16.143.73:80/pets/count`)
-		  .then((response) => response.json())
-		  .then((count) => {
-			//fetch(GlobalURL+`/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
-			fetch(`${BACKEND_API_URL}/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
-			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
-			.then((response) => response.json())
-			.then((data) => {
-			  setTotalAdoptionsCustomer(count);
-			  setAdoptionsCustomer(data);
-			  setLoading(false);
-			  setStartIndex(currentPage*pageSize);
-			});
+		fetchAdoptionCustomer(page, pageSize);
+	  }, [fetchAdoptionCustomer, page, pageSize]);
+	
+	  const [totalAdoptionCustomer, setTotalAdoptionCustomer] = useState(0);
+	  useEffect(() => {
+		axios
+		  //.get(`${BACKEND_API_URL}/adoptions/count`)
+		  .get(GlobalURL+`/adoptionCustomer/count`)
+		  .then((response) => {
+			setTotalAdoptionCustomer(response.data);
 		  })
-		  .catch((error) => {
-			console.error(error);
-			setLoading(false);
-		  });
-		};
-		fetchRecLbl();
-	  }, [currentPage, pageSize]);
+		  .catch((error) => console.log(error));
+	  }, []);
+	
+	  const totalPages = Math.max(1, Math.ceil(totalAdoptionCustomer / pageSize));
+	
+	  const startIdx = page * pageSize;
+	  const endIdx = Math.min(startIdx + pageSize, totalAdoptionCustomer);
+	
+	  const getPageNumbers = () => {
+		const pageNumbers = [];
+		let i;
+		for (i = 0; i < totalPages; i++) {
+		  if (
+			i === 0 ||
+			i === totalPages - 1 ||
+			(i >= page - 5 && i <= page + 5) ||
+			i < 5 ||
+			i > totalPages - 6
+		  ) {
+			pageNumbers.push(i);
+		  } else if (
+			pageNumbers[pageNumbers.length - 1] !== "..." &&
+			(i < page - 5 || i > page + 5)
+		  ) {
+			pageNumbers.push("...");
+		  }
+		}
+		return pageNumbers;
+	  };
+	
+	  const handlePageClick = (pageNumber: number) => {
+		setPage(pageNumber);
+	  };
+// 	const [loading, setLoading] = useState(false);
+// 	const [adoptionsCustomer, setAdoptionsCustomer] = useState([]);
+// 	const [currentPage, setCurrentPage]=useState(0)
+//     const [pageSize, setPageSize] = useState(10);
+//     const [totalAdoptionsCustomer, setTotalAdoptionsCustomer] =useState(0)
+// 	const [start_index,setStartIndex]=useState(0)
+// ;
+// 	useEffect(() => {
+// 		setLoading(true);
+  
+// 		const fetchRecLbl = () => {
+// 		  //fetch(GlobalURL+`/adoptionCustomer/count`)
+// 		  fetch(`${BACKEND_API_URL}/adoptionCustomer/count`)
+// 		  //fetch(`http://16.16.143.73:80/pets/count`)
+// 		  .then((response) => response.json())
+// 		  .then((count) => {
+// 			//fetch(GlobalURL+`/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
+// 			fetch(`${BACKEND_API_URL}/adoptionCustomer/page/${currentPage}/size/${pageSize}`)
+// 			//fetch(`http://16.16.143.73:80/pets/page/${currentPage}/size/${pageSize}`)
+// 			.then((response) => response.json())
+// 			.then((data) => {
+// 			  setTotalAdoptionsCustomer(count);
+// 			  setAdoptionsCustomer(data);
+// 			  setLoading(false);
+// 			  setStartIndex(currentPage*pageSize);
+// 			});
+// 		  })
+// 		  .catch((error) => {
+// 			console.error(error);
+// 			setLoading(false);
+// 		  });
+// 		};
+// 		fetchRecLbl();
+// 	  }, [currentPage, pageSize]);
 
 
 	const sortAdoptionCustomer = () => {
-		const sortedAdoptionCustomer = [...adoptionsCustomer].sort((a: AdoptionCustomer, b:AdoptionCustomer) => {
+		const sortedAdoptionCustomer = [...adoptionCustomer].sort((a: AdoptionCustomer, b:AdoptionCustomer) => {
 			if (a.id < b.id) {
 				return -1;
 			}
@@ -81,16 +156,16 @@ export const AdoptionCustomerShowAll = () => {
 	}
 
 	
-	const handlePreviousPage = () => {
-		if(currentPage>0)
-		{
-		  setCurrentPage(currentPage-1);
-		}
-	  };
+	// const handlePreviousPage = () => {
+	// 	if(currentPage>0)
+	// 	{
+	// 	  setCurrentPage(currentPage-1);
+	// 	}
+	//   };
 	
-	  const handleNextPage = () => {
-		setCurrentPage(currentPage+1);
-	  };
+	//   const handleNextPage = () => {
+	// 	setCurrentPage(currentPage+1);
+	//   };
 	
 
 
@@ -108,11 +183,8 @@ export const AdoptionCustomerShowAll = () => {
 					</IconButton>
 				</div>
 			)}
-			{!loading && totalAdoptionsCustomer === 0 && <p>No adoption customer found</p>}
-			{!loading && (<div>
-				{/* <Button sx={{ color: "black" }} onClick={sortAdoptionCustomer} >
-					Sort adoptions after date
-				</Button> */}
+			{!loading && totalAdoptionCustomer === 0 && <p>No adoption customer found</p>}
+			{/* {!loading && (<div>
 				<Button
 				sx={{color:"black"}}
 				disabled={currentPage===0}
@@ -128,8 +200,41 @@ export const AdoptionCustomerShowAll = () => {
 				Page {currentPage+1} of {Math.ceil(totalAdoptionsCustomer/pageSize)}
 			   </Box>
 			   </div>
-			)}
-			{!loading && totalAdoptionsCustomer > 0 && (
+			)} */}
+			{!loading && (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {/* <div>
+            Showing {startIdx + 1}-{endIdx} of {totalPeople} people
+          </div> */} 
+
+			<div className="pagination">
+						
+						{getPageNumbers().map((pageNumber, index) => (
+						<button
+							key={index}
+							className={`page-numbers ${
+							pageNumber === page ? "active" : ""
+							}`}
+							// className={`btn me-2 ${
+							//   pageNumber === page ? "btn-primary" : "btn-secondary"
+							// }`}
+							onClick={() => handlePageClick(Number(pageNumber))}
+							disabled={pageNumber === "..." || pageNumber === page}
+						>
+							{pageNumber === "..."
+							? "..."
+							: typeof pageNumber === "number"
+							? pageNumber + 1
+							: ""}
+						</button>
+						))}
+					
+					</div>
+					</div>
+				)}
+
+
+			{!loading && totalAdoptionCustomer > 0 && (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
 						<TableHead>
@@ -141,10 +246,10 @@ export const AdoptionCustomerShowAll = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{adoptionsCustomer.map((adoptionCustomer: AdoptionCustomer, index) => (
+							{adoptionCustomer.map((adoptionCustomer: AdoptionCustomer, index) => (
 								<TableRow key={index}>
 									<TableCell component="th" scope="row">
-										{start_index+ index + 1}
+										{page*pageSize+ index + 1}
 									</TableCell>
 									<TableCell component="th" scope="row">
 										<Link to={`/adoptionCustomer/${adoptionCustomer.id}/details`} title="View adoption's details">
@@ -183,7 +288,7 @@ export const AdoptionCustomerShowAll = () => {
 			)}
 
 		
-		<Button
+		{/* <Button
           sx={{color:"black"}}
           disabled={currentPage===0}
           onClick={handlePreviousPage}>
@@ -192,7 +297,7 @@ export const AdoptionCustomerShowAll = () => {
 
         <Button sx={{color:"black"}} onClick={handleNextPage}>
           Next Page
-        </Button>
+        </Button> */}
 
 		</Container >
 

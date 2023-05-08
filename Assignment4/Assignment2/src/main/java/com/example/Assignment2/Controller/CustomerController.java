@@ -61,6 +61,7 @@ public class CustomerController {
        return customerService.statisticsNoCustomers();
     }
 
+
     @GetMapping("/customers/autocomplete")
     public List<Customer> getCustomersSuggestions(@RequestParam String query)
     {

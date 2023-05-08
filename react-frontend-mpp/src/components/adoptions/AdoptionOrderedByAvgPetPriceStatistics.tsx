@@ -30,11 +30,12 @@ import { Adoption } from "../../models/Adoption";
 import { AdoptionDTOWithCustomerIds } from "../../models/AdoptionDTOWithCustomerIds";
 import { AdoptionDTOPetPriceStatistics } from "../../models/AdoptionsDTOPetPriceStatistics";
 
+
 export const AdoptionOrderedByAvgPetPriceStatistics = () => {
 	const [loading, setLoading] = useState(false);
 	const [adoptions, setAdoptions] = useState([]);
 	const [currentPage, setCurrentPage]=useState(1)
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(100);
     const [totalAdoptions, setTotalAdoptions] =useState(0)
 	const [start_index,setStartIndex]=useState(0)
 ;

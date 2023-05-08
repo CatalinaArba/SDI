@@ -8,11 +8,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Component
 public interface IPetRepository extends JpaRepository<Pet, Integer> {
     @Query("SELECT e FROM Pet e WHERE e.price >= :minPrice")
     List<Pet> findByPriceGreaterThanEqual(@Param("minPrice") Integer minPrice);
+
+    List<Pet> findByAdoptionId(int adoptionId);
+
+
+
 }
 

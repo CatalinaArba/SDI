@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -147,30 +148,132 @@ public class AdoptionService {
     //all the adoptions ordered by the average pet's price
 
     public List<AdoptionDTOStatisticsPetsPrice> getAllAdoptionsOrderByAvgPetPrice(Integer page, Integer size) {
-        List<Adoption> adoptions = adoptionRepository.findAll();
-        List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = new ArrayList<>();
-        ModelMapper modelMapper = new ModelMapper();
-        for (Adoption adoption : adoptions) {
-            double sum = 0.0;
-            int count = 0;
-            for (Pet pet : adoption.getPet()) {
-                sum += pet.getPrice();
-                count++;
-            }
-            double avgPrice = count > 0 ? sum / count : 0.0;
-            avgPrice=Math.round(avgPrice * 100.0) / 100.0;
-            AdoptionDTOStatisticsPetsPrice adoptionDTOStatisticsPetsPrice = modelMapper.map(adoption, AdoptionDTOStatisticsPetsPrice.class);
-            adoptionDTOStatisticsPetsPrice.setAvgPetPrice(avgPrice);
-            adoptionDTOStatisticsPetsPrices.add(adoptionDTOStatisticsPetsPrice);
-        }
-        adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
-        Long totalElements = adoptionRepository.count();
-        int totalPages = (int) Math.ceil((double) totalElements / size);
-        int startIndex = (page - 1) * size;
-        int endIndex = (int) Math.min(startIndex + size, totalElements);
-        List<AdoptionDTOStatisticsPetsPrice> pageAdoptions = adoptionDTOStatisticsPetsPrices.subList(startIndex, endIndex);
+//        List<Adoption> adoptions = adoptionRepository.findAll();
+//        List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = new ArrayList<>();
+//        ModelMapper modelMapper = new ModelMapper();
+//        for (Adoption adoption : adoptions) {
+//            double sum = 0.0;
+//            int count = 0;
+//            for (Pet pet : adoption.getPet()) {
+//                sum += pet.getPrice();
+//                count++;
+//            }
+//            double avgPrice = count > 0 ? sum / count : 0.0;
+//            avgPrice=Math.round(avgPrice * 100.0) / 100.0;
+//            AdoptionDTOStatisticsPetsPrice adoptionDTOStatisticsPetsPrice = modelMapper.map(adoption, AdoptionDTOStatisticsPetsPrice.class);
+//            adoptionDTOStatisticsPetsPrice.setAvgPetPrice(avgPrice);
+//            adoptionDTOStatisticsPetsPrices.add(adoptionDTOStatisticsPetsPrice);
+//        }
+//        adoptionDTOStatisticsPetsPrices.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed());
+//        Long totalElements = adoptionRepository.count();
+//        int totalPages = (int) Math.ceil((double) totalElements / size);
+//        int startIndex = (page - 1) * size;
+//        int endIndex = (int) Math.min(startIndex + size, totalElements);
+//        List<AdoptionDTOStatisticsPetsPrice> pageAdoptions = adoptionDTOStatisticsPetsPrices.subList(startIndex, endIndex);
+//
+//        return pageAdoptions;
 
-        return pageAdoptions;
+
+        //TRY2
+//        List<Adoption> adoptions = adoptionRepository.findAll();
+//        ModelMapper modelMapper = new ModelMapper();
+//
+//        List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = adoptions.stream()
+//                .map(adoption -> {
+//                    double avgPrice = adoptionRepository.findPetsByAdoptionId(adoption.getId()).stream()
+//                            .mapToDouble(Pet::getPrice)
+//                            .average()
+//                            .orElse(0.0);
+//                    avgPrice = Math.round(avgPrice * 100.0) / 100.0;
+//
+//                    AdoptionDTOStatisticsPetsPrice adoptionDTOStatisticsPetsPrice = modelMapper.map(adoption, AdoptionDTOStatisticsPetsPrice.class);
+//                    adoptionDTOStatisticsPetsPrice.setAvgPetPrice(avgPrice);
+//                    return adoptionDTOStatisticsPetsPrice;
+//                })
+//                .sorted(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed())
+//                .skip((page - 1) * size)
+//                .limit(size)
+//                .collect(Collectors.toList());
+//
+//        Long totalElements = adoptionRepository.count();
+//        int totalPages = (int) Math.ceil((double) totalElements / size);
+//
+//        return adoptionDTOStatisticsPetsPrices;
+
+//      try 3
+        List<Adoption> adoptions = adoptionRepository.findAll();
+        List<Pet> pets = petRepository.findAll();
+
+        List<AdoptionDTOStatisticsPetsPrice> adoptionDTOStatisticsPetsPrices = adoptions.stream()
+                .map(adoption -> new AdoptionDTOStatisticsPetsPrice(
+                        adoption.getId(),
+                        adoption.getAdoptionDate(),
+                        adoption.getAdoptionFee(),
+                        adoption.getAdoptionStatus(),
+                        adoption.getAdoptionLocation(),
+                        adoption.getAdoptionNotes(),
+                        0,
+                        0))
+                .collect(Collectors.toList());
+
+        Map<Integer, AdoptionDTOStatisticsPetsPrice> adoptionMap = adoptionDTOStatisticsPetsPrices.stream()
+                .collect(Collectors.toMap(AdoptionDTOStatisticsPetsPrice::getId, Function.identity()));
+
+        pets.forEach(pet -> {
+            AdoptionDTOStatisticsPetsPrice adoptionDTO = adoptionMap.get(pet.getAdoption().getId());
+            if (adoptionDTO != null) {
+                adoptionDTO.increaseCount();
+                adoptionDTO.increaseSum(pet.getPrice());
+                adoptionDTO.computeAvgPetPrice();
+            }
+        });
+
+        List<AdoptionDTOStatisticsPetsPrice> sortedAndPaginatedAdoptionDTOStatisticsPetsPrices = adoptionDTOStatisticsPetsPrices.stream()
+                .sorted(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice).reversed())
+                .skip((page - 1) * size)
+                .limit(size)
+                .collect(Collectors.toList());
+
+        return sortedAndPaginatedAdoptionDTOStatisticsPetsPrices;
+
+
+        //try4
+//        List<AdoptionDTOStatisticsPetsPrice> result = new ArrayList<>();
+//        List<Adoption> adoptions = adoptionRepository.findAll();
+//
+//        for (Adoption adoption : adoptions) {
+//            Integer sum = 0;
+//            Integer count = 0;
+//
+//            Integer id=adoption.getId();
+//            List<Pet> pets=petRepository.findByAdoptionId(id);
+//            // Find for current Person all its tickets, along with their Total_Distance of BusRoute
+//            for (Pet pet :pets) {
+//                sum+= pet.getPrice();
+//                count+=1;
+//
+//            }
+//
+//            if (count > 0) {
+//                //double averagePrice = sum / count;
+//                AdoptionDTOStatisticsPetsPrice dto =  new AdoptionDTOStatisticsPetsPrice(
+//                        adoption.getId(),
+//                        adoption.getAdoptionDate(),
+//                        adoption.getAdoptionFee(),
+//                        adoption.getAdoptionStatus(),
+//                        adoption.getAdoptionLocation(),
+//                        adoption.getAdoptionNotes(),
+//                        0,
+//                        0);
+//                dto.computeAvgPetPrice();
+//                result.add(dto);
+//            }
+//        }
+//
+//        result.sort(Comparator.comparingDouble(AdoptionDTOStatisticsPetsPrice::getAvgPetPrice));
+//
+//        return result;
+
     }
 
     public List<Adoption> getAdoptionIdsAutocomplete( String query)
@@ -181,5 +284,40 @@ public class AdoptionService {
         return adoptions.stream()
                 .filter(adoption -> adoption.getId().toString().startsWith(query)).limit(20)
                 .collect(Collectors.toList());
+    }
+
+    public List<AdoptionDTOStatisticsCustomersNo> getAllAdoptionsAnnTheCustomersNo(Integer page, Integer size) {
+        PageRequest pr=PageRequest.of(page,size);
+        Page<Adoption> adoptions=adoptionRepository.findAll(pr);
+        List<AdoptionCustomer> adoptionCustomers=adoptionCustomerRepository.findAll();
+
+        List<AdoptionDTOStatisticsCustomersNo> AdoptionDTOStatisticsCustomersNoList = adoptions.stream()
+                .map(adoption -> new AdoptionDTOStatisticsCustomersNo(
+                        adoption.getId(),
+                        adoption.getAdoptionDate(),
+                        adoption.getAdoptionFee(),
+                        adoption.getAdoptionStatus(),
+                        adoption.getAdoptionLocation(),
+                        adoption.getAdoptionNotes(),
+                        0))
+                .collect(Collectors.toList());
+
+        Map<Integer, AdoptionDTOStatisticsCustomersNo> adoptionMap = AdoptionDTOStatisticsCustomersNoList.stream()
+                .collect(Collectors.toMap(com.example.Assignment2.Model.AdoptionDTOStatisticsCustomersNo::getId, Function.identity()));
+
+        adoptionCustomers.forEach(adoptionCustomer -> {
+            AdoptionDTOStatisticsCustomersNo adoptionDTO = adoptionMap.get(adoptionCustomer.getAdoptionAdoptionCustomer().getId());
+            if (adoptionDTO != null) {
+                adoptionDTO.increaseNo();
+            }
+        });
+
+//        List<AdoptionDTOStatisticsCustomersNo> sortedAndPaginatedAdoptionDTOStatisticsPetsPrices = AdoptionDTOStatisticsCustomersNoList.stream()
+//                .skip((page - 1) * size)
+//                .limit(size)
+//                .collect(Collectors.toList());
+
+        return AdoptionDTOStatisticsCustomersNoList;
+
     }
 }

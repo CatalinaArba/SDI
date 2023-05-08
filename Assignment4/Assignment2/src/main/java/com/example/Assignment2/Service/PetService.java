@@ -100,8 +100,11 @@ public class PetService {
         petRepository.deleteById(id);
     }
 
-    public List<Pet> byPrice( Integer minPrice) {
-        return petRepository.findByPriceGreaterThanEqual(minPrice);
+    public List<Pet> byPrice( Integer minPrice,PageRequest pr) {
+        return petRepository.findAll(pr)
+                .stream()
+                .filter(pet -> pet.getPrice() > minPrice)
+                .collect(Collectors.toList());
     }
 
     public List<Pet> sortByPrice() {
